@@ -1,0 +1,6 @@
+[Examples]
+ numren 01_Test.txt 5      # =>  05_Test.txt
+ numren 01_Test.txt +4     # =>  05_Test.txt
+ numren 10_Test.txt -- -1  # =>  09_Test.txt
+ numren 01_Test.txt 001    # => 001_Test.txt
+ numren -d 2 010_Test.txt  # =>  10_Test.txt

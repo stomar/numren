@@ -1,0 +1,343 @@
+#!/usr/bin/ruby -w
+# == Name
+#
+# numren - rename files with numbered filenames
+#
+# == Synopsis
+#
+#    numren [options] file[s] number
+#
+# == Description
+#
+# +numren+ renames files with a filename consisting of a number part
+# and a name part separated by an underscore, like e.g. `01_Test.txt'.
+# Only the number part is changed, according to the given number.
+#
+# == Options
+#
+# -d, --digits NUMBER:: Rename the given files using NUMBER digits (if possible).
+#
+# -h, --help:: Prints a brief help message and exits.
+#
+# -v, --version:: Prints a brief version information and exits.
+#
+# == Examples
+#
+#    numren 01_Test.txt 5      # =>  05_Test.txt
+#    numren 01_Test.txt +4     # =>  05_Test.txt
+#    numren 10_Test.txt -- -1  # =>  09_Test.txt
+#    numren 01_Test.txt 001    # => 001_Test.txt
+#    numren -d 2 010_Test.txt  # =>  10_Test.txt
+#
+# == Author
+#
+# Copyright (C) 2011 Marcus Stollsteimer
+#
+# License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+#
+
+
+require 'optparse'
+
+class String
+
+  # Tests if string is a positive integer (padding with zeros is allowed).
+  #
+  # Returns +true+ if string is an integer.
+  def is_i?
+    !!(self =~ /^[+-]?[0-9]+$/)
+  end
+
+end
+
+module Numren
+
+  PROGNAME  = 'numren'
+  VERSION   = '1.0.0'
+  COPYRIGHT = "Copyright (C) 2011 Marcus Stollsteimer.\n" +
+              "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\n" +
+              "This is free software: you are free to change and redistribute it.\n" +
+              "There is NO WARRANTY, to the extent permitted by law."
+
+  # The class for numbered filenames.
+  # Instances must be initialized with a string containing
+  # a valid filename of the form 'Number_Text', or else
+  # an +ArgumentError+ is raised.
+  class Filename
+
+    # Initializes +Filename+ instances.
+    #
+    # +filename+ - a valid filename (an +ArgumentError+ may be raised)
+    def initialize(filename)
+      parts = split_filename(filename)
+
+      # valid filename? if not, raise exception
+      if parts.nil?
+        raise(ArgumentError, "`#{filename}' not of the form `number_name'.",
+              caller)
+      end
+
+      number_str, @name = parts
+      @number = number_str.to_i
+      @digits = number_str.size
+
+      assert(!@number.nil? && !@name.nil? && !@digits.nil?)
+    end
+
+    # Returns the numbered filename as string.
+    def to_s
+      "#{@number.to_s.rjust(@digits, '0')}_#{@name}"
+    end
+
+    # Sets the number part of the filename.
+    # If possible, the number of digits is kept
+    # (by padding with zeros if necessary).
+    # If not, the number of digits is updated.
+    # Raises a +RuntimeError+ if the number
+    # would be set to a negative integer.
+    #
+    # Examples:
+    #
+    #   fn = Numren::Filename.new('01_Test.txt')
+    #   fn.set_number(2)     and fn.to_s  # => 02_Test.txt
+    #   fn.set_number('001') and fn.to_s  # => 001_Test.txt
+    #   fn.set_number('+01') and fn.to_s  # => 002_Test.txt
+    #
+    # +number_str+ - string with new number part of filename
+    # (may also be an integer) or a string like '+5' or '-3'
+    def set_number(number_str)  # might be integer
+      head, sign, num = number_str.to_s.rpartition(/^[+-]/)
+        # '-01' => ['', '-', '01'], '01' => ['', '', '01']
+      assert head.empty?
+
+      # increase number of digits if necessary
+      @digits = num.size  if num.size > @digits
+
+      case sign
+      when '+'
+        @number = @number + num.to_i
+      when '-'
+        new_num = @number - num.to_i
+        if new_num < 0
+          raise(RuntimeError,
+                "`#{@number.to_s.rjust(@digits, '0')}' can not be decreased by #{num}.", caller)
+        end
+        @number = new_num
+      else
+        @number = num.to_i
+      end
+      # increase number of digits if necessary (only applies to incremented numbers)
+      @digits = @number.to_s.size  if @number.to_s.size > @digits
+    end
+
+    # Sets number of digits if possible
+    # (not to less than to the number of digits
+    # of +@number+ without any padding).
+    #
+    # +digits+ - new number of digits
+    #
+    # Returns true if +@digits+ is set to new number, false otherwise.
+    def set_digits(digits)
+      return false  if @number.to_s.size > digits
+      @digits = digits
+
+      true
+    end
+
+    private
+
+    # Splits a filename of the form `Number_Name' in its two parts.
+    #
+    # +filename+ - string of the form `number_name'
+    #
+    # Returns the array [number_str, name] or
+    # +nil+ if +filename+ is not of the form `number_name'.
+    def split_filename(filename)
+
+      parts = filename.split('_')
+
+      # error if trailing or no '_' || first part not a valid number  FIXME: +01_Test.txt valid!
+      return nil if (parts.size < 2) || !(parts[0].is_i?)
+
+      number_str = parts[0]
+      name       = parts[1..-1].join('_')
+
+      assert(filename == number_str + '_' + name)
+
+      [number_str, name]
+    end
+
+    # Fails when expression is not true.
+    def assert(expression)
+      fail "assertion failure" unless expression
+    end
+  end
+
+  # Parser for the command line options.
+  # The class method parse! does the job.
+  class Optionparser
+
+    # Parses the command line options from +argv+.
+    # (+argv+ is cleared).
+    # Might print out help or version information.
+    #
+    # +argv+ - array with the command line options
+    #
+    # Returns a hash containing the option parameters.
+    def self.parse!(argv)
+
+      options = {
+        :files  => nil,
+        :number => nil,
+        :digits => nil
+      }
+
+      opt_parser = OptionParser.new do |opt|
+        opt.banner = "Usage: #{PROGNAME} [options] file[s] number \n" +
+                     "   or: #{PROGNAME} -d NUMBER file[s]"
+        opt.separator ""
+        opt.separator "numren renames files with a filename consisting of a number part"
+        opt.separator "and a name part separated by an underscore, like e.g. `01_Test.txt'."
+        opt.separator "Only the number part is changed, according to the given number."
+        opt.separator ""
+        opt.separator "Options"
+        opt.separator ""
+
+        # process --version and --help first,
+        # exit successfully (GNU Coding Standards)
+        opt.on("-h", "--help", "Prints a brief help message and exits.") do
+          puts opt_parser
+          exit
+        end
+
+        opt.on("-v", "--version",
+               "Prints a brief version information and exits.") do
+          puts "#{PROGNAME} #{VERSION}"
+          puts COPYRIGHT
+          exit
+        end
+
+        opt.on("-d", "--digits NUMBER", Integer,
+               "Rename the given files using NUMBER digits (if possible).") do |d|
+          options[:digits] = d
+        end
+
+        opt.separator ""
+        opt.separator "Report bugs on the numren home page: <https://github.com/stomar/numren/>"
+      end
+      opt_parser.parse!(argv)
+
+      # check number of arguments left in argv and option argument values
+      if options[:digits].nil?  # -d option not set
+        # only file[s] and number should be left (at least 2 arguments)
+        raise "wrong number of arguments"       if argv.size < 2
+        raise "last argument must be a number"  unless argv[-1].is_i?
+        options[:number] = argv.pop
+      else  # -d option set
+        # only file[s] should be left (at least 1 argument)
+        raise "wrong number of arguments"       if argv.size < 1
+        raise "invalid argument: -d #{options[:digits]} (integer > 0 expected)"  if options[:digits] < 1
+      end
+
+      options[:files]  = Array.new(argv)
+      argv.clear
+
+      options
+    end
+  end
+
+  # The main program. It's run! method is called
+  # if the script is run from the command line.
+  # It parses the command line arguments and renames the files.
+  class Application
+
+    ERRORCODE = {'GENERAL' => 1, 'USAGE' => 2}
+
+    # The main program.
+    def self.run!
+
+      # parse options
+      begin
+        options = Optionparser.parse!(ARGV)
+      rescue => e
+        usage_fail(e.message)
+      end
+
+      # main body #
+
+      options[:files].each do |filename|
+        unless File.exist?(filename)
+          puts "There is no file `#{filename}'. (Skipped.)"
+          next
+        end
+
+        # initialize filename
+        begin
+          fn = Filename.new(filename)
+        rescue ArgumentError => e
+          warn(e.message + ' (Skipped.)')
+          next
+        end
+
+        # create new filename
+        begin
+          if options[:digits].nil?
+            fn.set_number(options[:number])
+          else  # -d option set
+            fn.set_digits(options[:digits])
+          end
+        rescue RuntimeError => e
+          warn(e.message + ' (Skipped.)')
+          next
+        end
+        new_filename = fn.to_s
+
+        # filenames are identical
+        if new_filename == filename
+          warn("`#{filename}' and `#{new_filename}' are the same file. (Skipped.)")
+          next
+        end
+
+        # move file
+        if File.exist?(new_filename)
+          overwrite_ok = ask("File `#{new_filename}' already exists. Overwrite?")
+          next unless overwrite_ok
+        end
+
+        puts "Moving from `#{filename}' to `#{new_filename}'."
+        File.rename(filename, new_filename)
+      end   # of each
+    end
+
+    private
+
+    # Asks for yes or no (y/n).
+    #
+    # +question+ - string to be printed
+    #
+    # Returns +true+ if the answer is yes.
+    def self.ask(question)
+      while true
+        print question + ' [y/n] '
+        reply = $stdin.gets.chomp.downcase  # $stdin: avoids gets / ARGV problem
+        return true   if reply == 'y'
+        return false  if reply == 'n'
+        puts 'Please answer "y" or "n".'
+      end
+    end
+
+    # Prints an error message and a short help information, then exits.
+    def self.usage_fail(message)
+      warn "#{PROGNAME}: #{message}"
+      warn "Use `#{PROGNAME} --help' for valid options."
+      exit ERRORCODE['USAGE']
+    end
+  end
+
+### call main method only if called on command line
+
+if __FILE__ == $0
+  Application.run!
+end
+
+end  # module
