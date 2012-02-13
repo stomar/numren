@@ -133,8 +133,8 @@ class OptionparserTest < Test::Unit::TestCase
     assert_equal(options[:digits], 1)
 
     assert_raises(OptionParser::InvalidArgument) { options = Numren::Optionparser.parse!(['-d', '0.5', '01_Test.txt']) }
-    assert_raises(RuntimeError) { options = Numren::Optionparser.parse!(['-d',   '0', '01_Test.txt']) }
-    assert_raises(RuntimeError) { options = Numren::Optionparser.parse!(['-d',  '-1', '01_Test.txt']) }
+    assert_raises(OptionParser::InvalidArgument) { options = Numren::Optionparser.parse!(['-d',   '0', '01_Test.txt']) }
+    assert_raises(OptionParser::InvalidArgument) { options = Numren::Optionparser.parse!(['-d',  '-1', '01_Test.txt']) }
   end
 
   def test_wrong_number_of_arguments

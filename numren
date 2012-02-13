@@ -218,6 +218,7 @@ module Numren
 
         opt.on("-d", "--digits NUMBER", Integer,
                "Rename the given files using NUMBER digits (if possible).") do |d|
+          raise(OptionParser::InvalidArgument, d)  unless d > 0
           options[:digits] = d
         end
 
@@ -235,7 +236,6 @@ module Numren
       else  # -d option set
         # only file[s] should be left (at least 1 argument)
         raise "wrong number of arguments"       if argv.size < 1
-        raise "invalid argument: -d #{options[:digits]} (integer > 0 expected)"  if options[:digits] < 1
       end
 
       options[:files]  = Array.new(argv)
