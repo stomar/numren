@@ -40,7 +40,8 @@ man: numren.1
 numren.1: numren numren.h2m
 	@$(HELP2MAN) --no-info --name='rename files with numbered filenames' \
 	          --include=numren.h2m -o numren.1 ./numren
-	@$(SED) -i '/\.PP/{N;s/\.PP\nOptions/.SH OPTIONS/};s/^License GPL/.br\nLicense GPL/' numren.1
+	@$(SED) -i '/\.PP/{N;s/\.PP\nOptions/.SH OPTIONS/}' numren.1
+	@$(SED) -i 's/^License GPL/.br\nLicense GPL/;s/There is NO WARRANTY/.br\nThere is NO WARRANTY/' numren.1
 
 
 .PHONY : installdirs
