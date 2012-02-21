@@ -10,7 +10,7 @@
 # == Description
 #
 # +numren+ renames files with a filename consisting of a number part
-# and a name part separated by an underscore, like e.g. `01_Test.txt'.
+# and a name part separated by an underscore, like e.g. `01_Sample.txt'.
 # Only the number part is changed, according to the given number.
 #
 # == Options
@@ -23,11 +23,11 @@
 #
 # == Examples
 #
-#    numren 01_Test.txt 5      # =>  05_Test.txt
-#    numren 01_Test.txt +4     # =>  05_Test.txt
-#    numren 10_Test.txt -- -1  # =>  09_Test.txt
-#    numren 01_Test.txt 001    # => 001_Test.txt
-#    numren -d 2 010_Test.txt  # =>  10_Test.txt
+#    numren 01_Sample.txt 5      # =>  05_Sample.txt
+#    numren 01_Sample.txt +4     # =>  05_Sample.txt
+#    numren 10_Sample.txt -- -1  # =>  09_Sample.txt
+#    numren 01_Sample.txt 001    # => 001_Sample.txt
+#    numren -d 2 010_Sample.txt  # =>  10_Sample.txt
 #
 # == Author
 #
@@ -97,10 +97,10 @@ module Numren
     #
     # Examples:
     #
-    #   fn = Numren::Filename.new('01_Test.txt')
-    #   fn.set_number(2)     and fn.to_s  # => 02_Test.txt
-    #   fn.set_number('001') and fn.to_s  # => 001_Test.txt
-    #   fn.set_number('+01') and fn.to_s  # => 002_Test.txt
+    #   fn = Numren::Filename.new('01_Sample.txt')
+    #   fn.set_number(2)     and fn.to_s  # => 02_Sample.txt
+    #   fn.set_number('001') and fn.to_s  # => 001_Sample.txt
+    #   fn.set_number('+01') and fn.to_s  # => 002_Sample.txt
     #
     # +number_str+ - string with new number part of filename
     # (may also be an integer) or a string like '+5' or '-3'
@@ -155,7 +155,7 @@ module Numren
 
       parts = filename.split('_')
 
-      # error if trailing or no '_' || first part not a valid number  FIXME: +01_Test.txt valid!
+      # error if trailing or no '_' || first part not a valid number  FIXME: +01_Sample.txt valid!
       return nil  if (parts.size < 2) || !(parts[0].is_i?)
 
       number_str = parts[0]
@@ -196,7 +196,7 @@ module Numren
                      "   or: #{PROGNAME} -d NUMBER file[s]"
         opt.separator ""
         opt.separator "numren renames files with a filename consisting of a number part"
-        opt.separator "and a name part separated by an underscore, like e.g. `01_Test.txt'."
+        opt.separator "and a name part separated by an underscore, like e.g. `01_Sample.txt'."
         opt.separator "Only the number part is changed, according to the given number."
         opt.separator ""
         opt.separator "Options"

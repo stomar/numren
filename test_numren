@@ -47,72 +47,72 @@ class FilenameTest < Test::Unit::TestCase
 
   def test_new
     # Check for well-formed names.
-    assert_nothing_raised { Numren::Filename.new('01_Test.dat') } 
-    assert_nothing_raised { Numren::Filename.new('01_02_Test.dat') }
+    assert_nothing_raised { Numren::Filename.new('01_Sample.dat') }
+    assert_nothing_raised { Numren::Filename.new('01_02_Sample.dat') }
 
     # Check for: no '_', no first part or no second part.
-    assert_raises(ArgumentError) { Numren::Filename.new('Test.dat') }
-    assert_raises(ArgumentError) { Numren::Filename.new('_Test.dat') }
+    assert_raises(ArgumentError) { Numren::Filename.new('Sample.dat') }
+    assert_raises(ArgumentError) { Numren::Filename.new('_Sample.dat') }
     assert_raises(ArgumentError) { Numren::Filename.new('01_') }
 
     # Check for: first part is not a number.
-    assert_raises(ArgumentError) { Numren::Filename.new('AB_Test.dat') }
-    assert_raises(ArgumentError) { Numren::Filename.new('0A_Test.dat') }
-    assert_raises(ArgumentError) { Numren::Filename.new('A0_Test.dat') }
+    assert_raises(ArgumentError) { Numren::Filename.new('AB_Sample.dat') }
+    assert_raises(ArgumentError) { Numren::Filename.new('0A_Sample.dat') }
+    assert_raises(ArgumentError) { Numren::Filename.new('A0_Sample.dat') }
   end
 
   def test_to_s
-    assert_equal(Numren::Filename.new('01_Test.dat').to_s, '01_Test.dat')
+    assert_equal(Numren::Filename.new('01_Sample.dat').to_s, '01_Sample.dat')
   end
 
   def test_set_number
-    fn = Numren::Filename.new('01_Test.dat')
+    fn = Numren::Filename.new('01_Sample.dat')
     fn.set_number 2      # a number
-    assert_equal(fn.to_s, '02_Test.dat')
+    assert_equal(fn.to_s, '02_Sample.dat')
     fn.set_number '001'  # a string
-    assert_equal(fn.to_s, '001_Test.dat')
+    assert_equal(fn.to_s, '001_Sample.dat')
   end
 
   def test_set_number_increase
-    fn = Numren::Filename.new('01_Test.dat')
+    fn = Numren::Filename.new('01_Sample.dat')
     fn.set_number '+2'
-    assert_equal(fn.to_s, '03_Test.dat')
+    assert_equal(fn.to_s, '03_Sample.dat')
     fn.set_number '+101'
-    assert_equal(fn.to_s, '104_Test.dat')
+    assert_equal(fn.to_s, '104_Sample.dat')
   end
 
   def test_set_number_decrease
-    fn = Numren::Filename.new('11_Test.dat')
+    fn = Numren::Filename.new('11_Sample.dat')
     fn.set_number '-2'
-    assert_equal(fn.to_s, '09_Test.dat')
+    assert_equal(fn.to_s, '09_Sample.dat')
     assert_raises(RuntimeError) { fn.set_number '-10' }
     fn.set_number '-9'
-    assert_equal(fn.to_s, '00_Test.dat')
+    assert_equal(fn.to_s, '00_Sample.dat')
   end
 
   def test_set_number_increase_decrease
     # see if number of digits is set correctly
-    fn = Numren::Filename.new('99_Test.dat')
+    fn = Numren::Filename.new('99_Sample.dat')
     fn.set_number '+1'
-    assert_equal(fn.to_s, '100_Test.dat')
+    assert_equal(fn.to_s, '100_Sample.dat')
     fn.set_number '-1'
-    assert_equal(fn.to_s, '099_Test.dat')
+    assert_equal(fn.to_s, '099_Sample.dat')
   end
 
   def test_set_digits
-    fn = Numren::Filename.new('010_Test.dat')
-    assert_equal(fn.to_s, '010_Test.dat')
+    fn = Numren::Filename.new('010_Sample.dat')
+    assert_equal(fn.to_s, '010_Sample.dat')
 
     res = fn.set_digits(2)
-    assert_equal(fn.to_s, '10_Test.dat')
+    assert_equal(fn.to_s, '10_Sample.dat')
     assert(res == true)
 
     res = fn.set_digits(2)
-    assert_equal(fn.to_s, '10_Test.dat')
+    assert_equal(fn.to_s, '10_Sample.dat')
     assert(res == true)
 
     res = fn.set_digits(1)
-    assert_equal(fn.to_s, '10_Test.dat')
+    assert_equal(fn.to_s, '10_Sample.dat')
     assert(res == false)
   end
 
@@ -121,24 +121,24 @@ end
 class OptionparserTest < Test::Unit::TestCase
 
   def test_parser
-    options = Numren::Optionparser.parse!(['01_Test.txt', '02_Test.txt', '+10'])
-    assert_equal(options[:files], ['01_Test.txt', '02_Test.txt'])
+    options = Numren::Optionparser.parse!(['01_Sample.txt', '02_Sample.txt', '+10'])
+    assert_equal(options[:files], ['01_Sample.txt', '02_Sample.txt'])
     assert_equal(options[:number], '+10')
   end
 
   def test_d_option
-    options = Numren::Optionparser.parse!(['-d', '1', '01_Test.txt', '02_Test.txt'])
-    assert_equal(options[:files], ['01_Test.txt', '02_Test.txt'])
+    options = Numren::Optionparser.parse!(['-d', '1', '01_Sample.txt', '02_Sample.txt'])
+    assert_equal(options[:files], ['01_Sample.txt', '02_Sample.txt'])
     assert_equal(options[:number], nil)
     assert_equal(options[:digits], 1)
 
-    assert_raises(OptionParser::InvalidArgument) { options = Numren::Optionparser.parse!(['-d', '0.5', '01_Test.txt']) }
-    assert_raises(OptionParser::InvalidArgument) { options = Numren::Optionparser.parse!(['-d',   '0', '01_Test.txt']) }
-    assert_raises(OptionParser::InvalidArgument) { options = Numren::Optionparser.parse!(['-d',  '-1', '01_Test.txt']) }
+    assert_raises(OptionParser::InvalidArgument) { options = Numren::Optionparser.parse!(['-d', '0.5', '01_Sample.txt']) }
+    assert_raises(OptionParser::InvalidArgument) { options = Numren::Optionparser.parse!(['-d',   '0', '01_Sample.txt']) }
+    assert_raises(OptionParser::InvalidArgument) { options = Numren::Optionparser.parse!(['-d',  '-1', '01_Sample.txt']) }
   end
 
   def test_wrong_number_of_arguments
-    assert_raises(RuntimeError) { options = Numren::Optionparser.parse!(['01_Test.txt']) }
+    assert_raises(RuntimeError) { options = Numren::Optionparser.parse!(['01_Sample.txt']) }
     assert_raises(RuntimeError) { options = Numren::Optionparser.parse!(['']) }
     assert_raises(RuntimeError) { options = Numren::Optionparser.parse!([]) }
   end

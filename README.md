@@ -3,7 +3,7 @@ numren
 
 `numren` is a command line tool (written in [Ruby][Ruby]) that renames files with a filename
 consisting of a number part and a name part separated by an underscore,
-like e.g. `01_Test.txt`.
+like e.g. `01_Sample.txt`.
 Only the number part is changed, according to the given number.
 
 Examples
@@ -12,20 +12,20 @@ Examples
 On Linux or OS X use the program as shown in the examples below.
 On Windows use `"ruby numren ..."` instead.
 
-`numren 01_Test.txt 5`
-  : renames `01.Test.txt` to `05_Test.txt`
+`numren 01_Sample.txt 5`
+  : renames `01.Sample.txt` to `05_Sample.txt`
 
-`numren 01_Test.txt +4`
-  : renames `01_Test.txt` to `05_Test.txt`
+`numren 01_Sample.txt +4`
+  : renames `01_Sample.txt` to `05_Sample.txt`
 
-`numren 10_Test.txt -- -1`
-  : renames `10_Test.txt` to `09_Test.txt`
+`numren 10_Sample.txt -- -1`
+  : renames `10_Sample.txt` to `09_Sample.txt`
 
-`numren 01_Test.txt 001`
-  : renames `01_Test.txt` to `001_Test.txt`
+`numren 01_Sample.txt 001`
+  : renames `01_Sample.txt` to `001_Sample.txt`
 
-`numren -d 2 010_Test.txt`
-  : renames `010_Test.txt` to `10_Test.txt`
+`numren -d 2 010_Sample.txt`
+  : renames `010_Sample.txt` to `10_Sample.txt`
 
 Installation
 ------------
