@@ -51,7 +51,7 @@ its man page with `man numren`.
 License
 -------
 
-Copyright &copy; 2011, Marcus Stollsteimer
+Copyright &copy; 2011-2012, Marcus Stollsteimer
 
 `numren` is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License version 3 or later (GPLv3+),
