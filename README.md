@@ -48,6 +48,11 @@ Documentation
 If you installed `numren` using `make install` you can read
 its man page with `man numren`.
 
+Reporting bugs
+--------------
+
+Report bugs on the `numren` home page: <https://github.com/stomar/numren/>
+
 License
 -------
 
