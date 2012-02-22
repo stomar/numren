@@ -23,11 +23,11 @@
 #
 # == Examples
 #
-#    numren 01_Sample.txt 5      # =>  05_Sample.txt
-#    numren 01_Sample.txt +4     # =>  05_Sample.txt
-#    numren 10_Sample.txt -- -1  # =>  09_Sample.txt
-#    numren 01_Sample.txt 001    # => 001_Sample.txt
-#    numren -d 2 010_Sample.txt  # =>  10_Sample.txt
+#   numren 01_Sample.txt 5      # =>  05_Sample.txt
+#   numren 01_Sample.txt +4     # =>  05_Sample.txt
+#   numren 10_Sample.txt -- -1  # =>  09_Sample.txt
+#   numren 01_Sample.txt 001    # => 001_Sample.txt
+#   numren -d 2 010_Sample.txt  # =>  10_Sample.txt
 #
 # == Author
 #
@@ -168,7 +168,7 @@ module Numren
 
     # Fails when expression is not true.
     def assert(expression)
-      fail "assertion failure"  unless expression
+      fail 'assertion failure'  unless expression
     end
   end
 
@@ -194,48 +194,48 @@ module Numren
       opt_parser = OptionParser.new do |opt|
         opt.banner = "Usage: #{PROGNAME} [options] file[s] number \n" +
                      "   or: #{PROGNAME} -d NUMBER file[s]"
-        opt.separator ""
-        opt.separator "numren renames files with a filename consisting of a number part"
+        opt.separator ''
+        opt.separator 'numren renames files with a filename consisting of a number part'
         opt.separator "and a name part separated by an underscore, like e.g. `01_Sample.txt'."
-        opt.separator "Only the number part is changed, according to the given number."
-        opt.separator ""
-        opt.separator "Options"
-        opt.separator ""
+        opt.separator 'Only the number part is changed, according to the given number.'
+        opt.separator ''
+        opt.separator 'Options'
+        opt.separator ''
 
         # process --version and --help first,
         # exit successfully (GNU Coding Standards)
-        opt.on("-h", "--help", "Prints a brief help message and exits.") do
+        opt.on('-h', '--help', 'Prints a brief help message and exits.') do
           puts opt_parser
           exit
         end
 
-        opt.on("-v", "--version",
-               "Prints a brief version information and exits.") do
+        opt.on('-v', '--version',
+               'Prints a brief version information and exits.') do
           puts "#{PROGNAME} #{VERSION}"
           puts COPYRIGHT
           exit
         end
 
-        opt.on("-d", "--digits NUMBER", Integer,
-               "Rename the given files using NUMBER digits (if possible).") do |d|
+        opt.on('-d', '--digits NUMBER', Integer,
+               'Rename the given files using NUMBER digits (if possible).') do |d|
           raise(OptionParser::InvalidArgument, d)  unless d > 0
           options[:digits] = d
         end
 
-        opt.separator ""
-        opt.separator "Report bugs on the numren home page: <https://github.com/stomar/numren/>"
+        opt.separator ''
+        opt.separator 'Report bugs on the numren home page: <https://github.com/stomar/numren/>'
       end
       opt_parser.parse!(argv)
 
       # check number of arguments left in argv and option argument values
       if options[:digits].nil?  # -d option not set
         # only file[s] and number should be left (at least 2 arguments)
-        raise "wrong number of arguments"       if argv.size < 2
-        raise "last argument must be a number"  unless argv[-1].is_i?
+        raise 'wrong number of arguments'       if argv.size < 2
+        raise 'last argument must be a number'  unless argv[-1].is_i?
         options[:number] = argv.pop
       else  # -d option set
         # only file[s] should be left (at least 1 argument)
-        raise "wrong number of arguments"       if argv.size < 1
+        raise 'wrong number of arguments'       if argv.size < 1
       end
 
       options[:files]  = Array.new(argv)
@@ -321,7 +321,7 @@ module Numren
         reply = $stdin.gets.chomp.downcase  # $stdin: avoids gets / ARGV problem
         return true   if reply == 'y'
         return false  if reply == 'n'
-        puts 'Please answer "y" or "n".'
+        puts "Please answer `y' or `n'."
       end
     end
 
