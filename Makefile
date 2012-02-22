@@ -20,7 +20,7 @@ SED = sed
 
 #### End of system configuration section. ####
 
-# files to install in bindir (distinguish between hosts)
+# files to install in bindir/mandir
 
 binfiles = numren
 manfiles = numren.1
