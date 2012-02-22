@@ -12,20 +12,25 @@ Examples
 On Linux or OS X use the program as shown in the examples below.
 On Windows use `"ruby numren ..."` instead.
 
-`numren 01_Sample.txt 5`
-  : renames `01.Sample.txt` to `05_Sample.txt`
+* `numren 01_Sample.txt 5`
 
-`numren 01_Sample.txt +4`
-  : renames `01_Sample.txt` to `05_Sample.txt`
+    renames `01.Sample.txt` to `05_Sample.txt`
 
-`numren 10_Sample.txt -- -1`
-  : renames `10_Sample.txt` to `09_Sample.txt`
+* `numren 01_Sample.txt +4`
 
-`numren 01_Sample.txt 001`
-  : renames `01_Sample.txt` to `001_Sample.txt`
+    renames `01_Sample.txt` to `05_Sample.txt`
 
-`numren -d 2 010_Sample.txt`
-  : renames `010_Sample.txt` to `10_Sample.txt`
+* `numren 10_Sample.txt -- -1`
+
+    renames `10_Sample.txt` to `09_Sample.txt`
+
+* `numren 01_Sample.txt 001`
+
+    renames `01_Sample.txt` to `001_Sample.txt`
+
+* `numren -d 2 010_Sample.txt`
+
+    renames `010_Sample.txt` to `10_Sample.txt`
 
 Installation
 ------------
