@@ -230,12 +230,12 @@ module Numren
       # check number of arguments left in argv and option argument values
       if options[:digits].nil?  # -d option not set
         # only file[s] and number should be left (at least 2 arguments)
-        raise 'wrong number of arguments'       if argv.size < 2
-        raise 'last argument must be a number'  unless argv[-1].is_i?
+        raise(ArgumentError, 'wrong number of arguments')       if argv.size < 2
+        raise(ArgumentError, 'last argument must be a number')  unless argv[-1].is_i?
         options[:number] = argv.pop
       else  # -d option set
         # only file[s] should be left (at least 1 argument)
-        raise 'wrong number of arguments'       if argv.size < 1
+        raise(ArgumentError, 'wrong number of arguments')       if argv.size < 1
       end
 
       options[:files]  = Array.new(argv)
