@@ -1,61 +1,57 @@
 #!/usr/bin/ruby -w
-# test_numren: unit tests for numren script.
-
-# Marcus Stollsteimer, Dec 2011
+# test_numren: Unit tests for the numren script.
+#
+# Copyright (C) 2011-2012 Marcus Stollsteimer
 
 require 'test/unit'
 load 'numren'
 
 PROGNAME    = 'test_numren'
 PROGVERSION = '0.0.1'
-COPYRIGHT   = 'Copyright (C) 2011 Marcus Stollsteimer.'
+
 
 class String_is_i_Test < Test::Unit::TestCase
 
-  def test_is_i?
-    # Check for valid integers.
+  def test_valid_integers
     assert('3'.is_i?)
     assert('01'.is_i?)
     assert('42'.is_i?)
     assert('123'.is_i?)
+    assert('0'.is_i?)
+  end
 
-    # Check for non-integers.
+  def test_non_integers
     assert('A'.is_i? == false)
     assert('0A'.is_i? == false)
     assert('A0'.is_i? == false)
     assert(''.is_i? == false)
+  end
 
-    # Check for +/-
-    assert('+5'.is_i? == true)
-    assert('-2'.is_i? == true)
-    assert('+02'.is_i? == true)
+  def test_signed_integers
+    assert('+5'.is_i?)
+    assert('-2'.is_i?)
+    assert('+02'.is_i?)
     assert('1+2'.is_i? == false)
     assert('3-2'.is_i? == false)
   end
-
 end
 
-class PrognameTest < Test::Unit::TestCase
-
-  def test_Progname
-    assert_equal('numren', Numren::PROGNAME)
-  end
-
-end
 
 class FilenameTest < Test::Unit::TestCase
 
-  def test_new
-    # Check for well-formed names.
+  def test_well_formed_names
     assert_nothing_raised { Numren::Filename.new('01_Sample.dat') }
     assert_nothing_raised { Numren::Filename.new('01_02_Sample.dat') }
+    assert_nothing_raised { Numren::Filename.new('00_Sample.dat') }
+  end
 
-    # Check for: no '_', no first part or no second part.
+  def test_for_missing_parts
     assert_raises(ArgumentError) { Numren::Filename.new('Sample.dat') }
     assert_raises(ArgumentError) { Numren::Filename.new('_Sample.dat') }
     assert_raises(ArgumentError) { Numren::Filename.new('01_') }
+  end
 
-    # Check for: first part is not a number.
+  def test_for_first_parts_that_are_not_a_number
     assert_raises(ArgumentError) { Numren::Filename.new('AB_Sample.dat') }
     assert_raises(ArgumentError) { Numren::Filename.new('0A_Sample.dat') }
     assert_raises(ArgumentError) { Numren::Filename.new('A0_Sample.dat') }
@@ -115,38 +111,45 @@ class FilenameTest < Test::Unit::TestCase
     assert_equal('10_Sample.dat', fn.to_s)
     assert(res == false)
   end
-
 end
+
 
 class OptionparserTest < Test::Unit::TestCase
 
-  def test_parser
+  def test_defaults
     options = Numren::Optionparser.parse!(['01_Sample.txt', '02_Sample.txt', '+10'])
-    assert_equal(['01_Sample.txt', '02_Sample.txt'], options[:files])
-    assert_equal('+10', options[:number])
+    expected = {
+      :files => ['01_Sample.txt', '02_Sample.txt'],
+      :number => '+10',
+      :digits => nil
+    }
+    assert_equal(expected, options)
   end
 
-  def test_d_option
+  def test_digits_option
     options = Numren::Optionparser.parse!(['-d', '1', '01_Sample.txt', '02_Sample.txt'])
-    assert_equal(['01_Sample.txt', '02_Sample.txt'], options[:files])
-    assert_equal(nil, options[:number])
-    assert_equal(1, options[:digits])
+    expected = {
+      :files => ['01_Sample.txt', '02_Sample.txt'],
+      :number => nil,
+      :digits => 1
+    }
+    assert_equal(expected, options)
+  end
 
-    assert_raises(OptionParser::InvalidArgument) { options = Numren::Optionparser.parse!(['-d', '0.5', '01_Sample.txt']) }
-    assert_raises(OptionParser::InvalidArgument) { options = Numren::Optionparser.parse!(['-d',   '0', '01_Sample.txt']) }
-    assert_raises(OptionParser::InvalidArgument) { options = Numren::Optionparser.parse!(['-d',  '-1', '01_Sample.txt']) }
-    assert_nothing_raised { options = Numren::Optionparser.parse!(['-d', '1', '01_Sample.txt']) }
+  def test_invalid_digits
+    assert_raises(OptionParser::InvalidArgument) { Numren::Optionparser.parse!(['-d', '0.5', '01_Sample.txt']) }
+    assert_raises(OptionParser::InvalidArgument) { Numren::Optionparser.parse!(['-d',   '0', '01_Sample.txt']) }
+    assert_raises(OptionParser::InvalidArgument) { Numren::Optionparser.parse!(['-d',  '-1', '01_Sample.txt']) }
   end
 
   def test_wrong_number_of_arguments
-    assert_raises(ArgumentError) { options = Numren::Optionparser.parse!(['01_Sample.txt']) }
-    assert_raises(ArgumentError) { options = Numren::Optionparser.parse!(['']) }
-    assert_raises(ArgumentError) { options = Numren::Optionparser.parse!([]) }
-    assert_raises(ArgumentError) { options = Numren::Optionparser.parse!(['-d', '1']) }
+    assert_raises(ArgumentError) { Numren::Optionparser.parse!(['01_Sample.txt']) }
+    assert_raises(ArgumentError) { Numren::Optionparser.parse!(['']) }
+    assert_raises(ArgumentError) { Numren::Optionparser.parse!([]) }
+    assert_raises(ArgumentError) { Numren::Optionparser.parse!(['-d', '1']) }
   end
 
-  def test_invalid
-    assert_raises(OptionParser::InvalidOption) { options = Numren::Optionparser.parse!(['-x']) }
+  def test_invalid_options
+    assert_raises(OptionParser::InvalidOption) { Numren::Optionparser.parse!(['-x']) }
   end
-
 end
