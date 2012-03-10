@@ -8,7 +8,7 @@ require 'minitest/spec'
 require 'minitest/autorun'
 load 'numren'
 
-PROGNAME    = 'test_numren'
+PROGNAME    = 'test_numren.rb'
 PROGVERSION = '0.0.1'
 
 
