@@ -14,7 +14,7 @@ On Windows use `"ruby numren ..."` instead.
 
 * `numren 01_Sample.txt 5`
 
-    renames `01.Sample.txt` to `05_Sample.txt`
+    renames `01_Sample.txt` to `05_Sample.txt`
 
 * `numren 01_Sample.txt +4`
 
@@ -37,8 +37,8 @@ Installation
 
 Place `numren` into your search path.
 
-On a Linux system you can also use `make install`,
-which installs `numren` and its man page to `/usr/local`.
+On a Linux system you can use `[sudo] rake install`
+to install `numren` and its man page to `/usr/local`.
 
 Requirements
 ------------
@@ -50,7 +50,7 @@ Documentation
 
 `numren --help` prints a brief help message.
 
-If you installed `numren` using `make install` you can read
+If you installed `numren` using `rake install` you can read
 its man page with `man numren`.
 
 Reporting bugs
