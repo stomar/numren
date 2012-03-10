@@ -3,153 +3,159 @@
 #
 # Copyright (C) 2011-2012 Marcus Stollsteimer
 
-require 'test/unit'
+require 'rubygems'
+require 'minitest/spec'
+require 'minitest/autorun'
 load 'numren'
 
 PROGNAME    = 'test_numren'
 PROGVERSION = '0.0.1'
 
 
-class String_is_i_Test < Test::Unit::TestCase
+describe String do
 
-  def test_valid_integers
-    assert('3'.is_i?)
-    assert('01'.is_i?)
-    assert('42'.is_i?)
-    assert('123'.is_i?)
-    assert('0'.is_i?)
-  end
+  describe 'when asked if string represents an integer' do
+    it 'should recognize valid integers' do
+      '3'.is_i?.must_equal true
+      '01'.is_i?.must_equal true
+      '42'.is_i?.must_equal true
+      '123'.is_i?.must_equal true
+      '0'.is_i?.must_equal true
+    end
 
-  def test_non_integers
-    assert('A'.is_i? == false)
-    assert('0A'.is_i? == false)
-    assert('A0'.is_i? == false)
-    assert(''.is_i? == false)
-  end
+    it 'should recognize non-integers' do
+      'A'.is_i?.must_equal false
+      '0A'.is_i?.must_equal false
+      'A0'.is_i?.must_equal false
+      ''.is_i?.must_equal false
+    end
 
-  def test_signed_integers
-    assert('+5'.is_i?)
-    assert('-2'.is_i?)
-    assert('+02'.is_i?)
-    assert('1+2'.is_i? == false)
-    assert('3-2'.is_i? == false)
+    it 'should recognize signed integers' do
+      '+5'.is_i?.must_equal true
+      '-2'.is_i?.must_equal true
+      '+02'.is_i?.must_equal true
+      '1+2'.is_i?.must_equal false
+      '3-2'.is_i?.must_equal false
+    end
   end
 end
 
 
-class FilenameTest < Test::Unit::TestCase
+describe Numren::Filename do
 
-  def test_well_formed_names
-    assert_nothing_raised { Numren::Filename.new('01_Sample.dat') }
-    assert_nothing_raised { Numren::Filename.new('01_02_Sample.dat') }
-    assert_nothing_raised { Numren::Filename.new('00_Sample.dat') }
+  before do
+    @fn = Numren::Filename.new('01_Sample.dat')
   end
 
-  def test_for_missing_parts
+  it 'can be created' do
+    Numren::Filename.new('01_Sample.dat').must_be_instance_of Numren::Filename
+    Numren::Filename.new('01_02_Sample.dat').must_be_instance_of Numren::Filename
+    Numren::Filename.new('00_Sample.dat').must_be_instance_of Numren::Filename
+  end
+
+  it 'should not accept ill-formed filenames' do
     assert_raises(ArgumentError) { Numren::Filename.new('Sample.dat') }
     assert_raises(ArgumentError) { Numren::Filename.new('_Sample.dat') }
     assert_raises(ArgumentError) { Numren::Filename.new('01_') }
   end
 
-  def test_for_first_parts_that_are_not_a_number
+  it 'should only accept filenames starting with a number part' do
     assert_raises(ArgumentError) { Numren::Filename.new('AB_Sample.dat') }
     assert_raises(ArgumentError) { Numren::Filename.new('0A_Sample.dat') }
     assert_raises(ArgumentError) { Numren::Filename.new('A0_Sample.dat') }
   end
 
-  def test_to_s
-    assert_equal('01_Sample.dat', Numren::Filename.new('01_Sample.dat').to_s)
+  it 'can be converted to string' do
+    @fn.to_s.must_equal '01_Sample.dat'
   end
 
-  def test_set_number
-    fn = Numren::Filename.new('01_Sample.dat')
-    fn.set_number 2      # a number
-    assert_equal('02_Sample.dat', fn.to_s)
-    fn.set_number '001'  # a string
-    assert_equal('001_Sample.dat', fn.to_s)
+  it 'can set its number part' do
+    @fn.set_number 2      # a number
+    @fn.to_s.must_equal '02_Sample.dat'
+    @fn.set_number '001'  # a string
+    @fn.to_s.must_equal '001_Sample.dat'
+    @fn.set_number 0      # zero
+    @fn.to_s.must_equal '000_Sample.dat'
   end
 
-  def test_set_number_increase
-    fn = Numren::Filename.new('01_Sample.dat')
-    fn.set_number '+2'
-    assert_equal('03_Sample.dat', fn.to_s)
-    fn.set_number '+101'
-    assert_equal('104_Sample.dat', fn.to_s)
+  it 'can increase its number part' do
+    @fn.set_number '+2'
+    @fn.to_s.must_equal '03_Sample.dat'
+    @fn.set_number '+101'
+    @fn.to_s.must_equal '104_Sample.dat'
   end
 
-  def test_set_number_decrease
-    fn = Numren::Filename.new('11_Sample.dat')
-    fn.set_number '-2'
-    assert_equal('09_Sample.dat', fn.to_s)
-    assert_raises(RuntimeError) { fn.set_number '-10' }
-    fn.set_number '-9'
-    assert_equal('00_Sample.dat', fn.to_s)
+  it 'can decrease its number part' do
+    @fn.set_number 11
+    @fn.set_number '-2'
+    @fn.to_s.must_equal '09_Sample.dat'
+    @fn.set_number '-9'
+    @fn.to_s.must_equal '00_Sample.dat'
   end
 
-  def test_set_number_increase_decrease
-    # see if number of digits is set correctly
-    fn = Numren::Filename.new('99_Sample.dat')
-    fn.set_number '+1'
-    assert_equal('100_Sample.dat', fn.to_s)
-    fn.set_number '-1'
-    assert_equal('099_Sample.dat', fn.to_s)
+  it 'can not decrease its number part below 0' do
+    lambda { @fn.set_number '-2' }.must_raise RuntimeError
   end
 
-  def test_set_digits
-    fn = Numren::Filename.new('010_Sample.dat')
-    assert_equal('010_Sample.dat', fn.to_s)
+  it 'updates the number of digits (if necessary) when increasing' do
+    @fn.set_number '99'
+    @fn.set_number '+1'
+    @fn.set_number '-1'
+    @fn.to_s.must_equal '099_Sample.dat'
+  end
 
-    res = fn.set_digits(2)
-    assert_equal('10_Sample.dat', fn.to_s)
-    assert(res == true)
+  it 'can set its number of digits' do
+    @fn.set_number '010'
+    @fn.to_s.must_equal '010_Sample.dat'
 
-    res = fn.set_digits(2)
-    assert_equal('10_Sample.dat', fn.to_s)
-    assert(res == true)
+    @fn.set_digits(2).must_equal true
+    @fn.to_s.must_equal '10_Sample.dat'
+  end
 
-    res = fn.set_digits(1)
-    assert_equal('10_Sample.dat', fn.to_s)
-    assert(res == false)
+  it 'sets its number of digits only if possible' do
+    @fn.set_number 10
+    @fn.set_digits(1).must_equal false
+    @fn.to_s.must_equal '10_Sample.dat'
   end
 end
 
 
-class OptionparserTest < Test::Unit::TestCase
+describe Numren::Optionparser do
 
-  def test_defaults
+  it 'should return the correct default values' do
     options = Numren::Optionparser.parse!(['01_Sample.txt', '02_Sample.txt', '+10'])
     expected = {
       :files => ['01_Sample.txt', '02_Sample.txt'],
       :number => '+10',
       :digits => nil
     }
-    assert_equal(expected, options)
+    options.must_equal expected
   end
 
-  def test_digits_option
+  it 'should recognize the -d option and return the correct default values' do
     options = Numren::Optionparser.parse!(['-d', '1', '01_Sample.txt', '02_Sample.txt'])
     expected = {
       :files => ['01_Sample.txt', '02_Sample.txt'],
       :number => nil,
       :digits => 1
     }
-    assert_equal(expected, options)
+    options.must_equal expected
   end
 
-  def test_invalid_digits
-    assert_raises(OptionParser::InvalidArgument) { Numren::Optionparser.parse!(['-d', '0.5', '01_Sample.txt']) }
-    assert_raises(OptionParser::InvalidArgument) { Numren::Optionparser.parse!(['-d',   '0', '01_Sample.txt']) }
-    assert_raises(OptionParser::InvalidArgument) { Numren::Optionparser.parse!(['-d',  '-1', '01_Sample.txt']) }
+  it 'should not accept invalid -d option values' do
+    lambda { Numren::Optionparser.parse!(['-d', '0.5', '01_Sample.txt']) }.must_raise OptionParser::InvalidArgument
+    lambda { Numren::Optionparser.parse!(['-d',   '0', '01_Sample.txt']) }.must_raise OptionParser::InvalidArgument
+    lambda { Numren::Optionparser.parse!(['-d',  '-1', '01_Sample.txt']) }.must_raise OptionParser::InvalidArgument
   end
 
-  def test_wrong_number_of_arguments
-    assert_raises(ArgumentError) { Numren::Optionparser.parse!(['01_Sample.txt']) }
-    assert_raises(ArgumentError) { Numren::Optionparser.parse!(['']) }
-    assert_raises(ArgumentError) { Numren::Optionparser.parse!([]) }
-    assert_raises(ArgumentError) { Numren::Optionparser.parse!(['-d', '1']) }
+  it 'should not accept wrong number of arguments' do
+    lambda { Numren::Optionparser.parse!(['01_Sample.txt']) }.must_raise ArgumentError
+    lambda { Numren::Optionparser.parse!(['']) }.must_raise ArgumentError
+    lambda { Numren::Optionparser.parse!([]) }.must_raise ArgumentError
+    lambda { Numren::Optionparser.parse!(['-d', '1']) }.must_raise ArgumentError
   end
 
-  def test_invalid_options
-    assert_raises(OptionParser::InvalidOption) { Numren::Optionparser.parse!(['-x']) }
+  it 'should not accept invalid options' do
+    lambda { Numren::Optionparser.parse!(['-x']) }.must_raise OptionParser::InvalidOption
   end
 end
