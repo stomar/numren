@@ -308,8 +308,6 @@ module Numren
       end   # of each
     end
 
-    private
-
     # Asks for yes or no (y/n).
     #
     # +question+ - string to be printed
