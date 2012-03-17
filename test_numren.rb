@@ -3,13 +3,9 @@
 #
 # Copyright (C) 2011-2012 Marcus Stollsteimer
 
-require 'rubygems'
 require 'minitest/spec'
 require 'minitest/autorun'
 load 'numren'
-
-PROGNAME    = 'test_numren.rb'
-PROGVERSION = '0.0.1'
 
 
 describe String do
