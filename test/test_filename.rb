@@ -1,40 +1,11 @@
 #!/usr/bin/ruby -w
-# test_numren: Unit tests for the numren script.
+# test_filename.rb: Unit tests for the numren script.
 #
 # Copyright (C) 2011-2012 Marcus Stollsteimer
 
 require 'minitest/spec'
 require 'minitest/autorun'
-load 'numren'
-
-
-describe String do
-
-  describe 'when asked if string represents an integer' do
-    it 'should recognize valid integers' do
-      '3'.is_i?.must_equal true
-      '01'.is_i?.must_equal true
-      '42'.is_i?.must_equal true
-      '123'.is_i?.must_equal true
-      '0'.is_i?.must_equal true
-    end
-
-    it 'should recognize non-integers' do
-      'A'.is_i?.must_equal false
-      '0A'.is_i?.must_equal false
-      'A0'.is_i?.must_equal false
-      ''.is_i?.must_equal false
-    end
-
-    it 'should recognize signed integers' do
-      '+5'.is_i?.must_equal true
-      '-2'.is_i?.must_equal true
-      '+02'.is_i?.must_equal true
-      '1+2'.is_i?.must_equal false
-      '3-2'.is_i?.must_equal false
-    end
-  end
-end
+load 'numren'  unless defined?(Numren)
 
 
 describe Numren::Filename do
@@ -112,46 +83,5 @@ describe Numren::Filename do
     @fn.set_number 10
     @fn.set_digits(1).must_equal false
     @fn.to_s.must_equal '10_Sample.dat'
-  end
-end
-
-
-describe Numren::Optionparser do
-
-  it 'should return the correct default values' do
-    options = Numren::Optionparser.parse!(['01_Sample.txt', '02_Sample.txt', '+10'])
-    expected = {
-      :files => ['01_Sample.txt', '02_Sample.txt'],
-      :number => '+10',
-      :digits => nil
-    }
-    options.must_equal expected
-  end
-
-  it 'should recognize the -d option and return the correct default values' do
-    options = Numren::Optionparser.parse!(['-d', '1', '01_Sample.txt', '02_Sample.txt'])
-    expected = {
-      :files => ['01_Sample.txt', '02_Sample.txt'],
-      :number => nil,
-      :digits => 1
-    }
-    options.must_equal expected
-  end
-
-  it 'should not accept invalid -d option values' do
-    lambda { Numren::Optionparser.parse!(['-d', '0.5', '01_Sample.txt']) }.must_raise OptionParser::InvalidArgument
-    lambda { Numren::Optionparser.parse!(['-d',   '0', '01_Sample.txt']) }.must_raise OptionParser::InvalidArgument
-    lambda { Numren::Optionparser.parse!(['-d',  '-1', '01_Sample.txt']) }.must_raise OptionParser::InvalidArgument
-  end
-
-  it 'should not accept wrong number of arguments' do
-    lambda { Numren::Optionparser.parse!(['01_Sample.txt']) }.must_raise ArgumentError
-    lambda { Numren::Optionparser.parse!(['']) }.must_raise ArgumentError
-    lambda { Numren::Optionparser.parse!([]) }.must_raise ArgumentError
-    lambda { Numren::Optionparser.parse!(['-d', '1']) }.must_raise ArgumentError
-  end
-
-  it 'should not accept invalid options' do
-    lambda { Numren::Optionparser.parse!(['-x']) }.must_raise OptionParser::InvalidOption
   end
 end
