@@ -270,7 +270,7 @@ module Numren
 
       options[:files].each do |filename|
         unless File.exist?(filename)
-          puts "There is no file `#{filename}'. (Skipped.)"
+          warn "There is no file `#{filename}'. (Skipped.)"
           next
         end
 
@@ -307,7 +307,7 @@ module Numren
           next  unless overwrite_ok
         end
 
-        puts "Moving from `#{filename}' to `#{new_filename}'."
+        warn "Moving from `#{filename}' to `#{new_filename}'."
         File.rename(filename, new_filename)
       end   # of each
     end
@@ -319,11 +319,11 @@ module Numren
     # Returns +true+ if the answer is yes.
     def self.ask(question) # :nodoc:
       while true
-        print "#{question} [y/n] "
+        $stderr.print "#{question} [y/n] "
         reply = $stdin.gets.chomp.downcase  # $stdin: avoids gets / ARGV problem
         return true   if reply == 'y'
         return false  if reply == 'n'
-        puts "Please answer `y' or `n'."
+        warn "Please answer `y' or `n'."
       end
     end
 
