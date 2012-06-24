@@ -45,7 +45,7 @@ class String
   #
   # Returns +true+ if string is an integer.
   def is_i?
-    !!(self =~ /\A[+-]?[0-9]+\Z/)
+    /\A[+-]?[0-9]+\Z/ === self
   end
 end
 
