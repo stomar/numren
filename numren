@@ -49,7 +49,7 @@ class String
   end
 end
 
-# This module contains the classes for the +numren+ tool
+# This module contains the classes for the +numren+ tool.
 module Numren
 
   PROGNAME  = 'numren'
