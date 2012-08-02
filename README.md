@@ -1,10 +1,31 @@
 numren
 ======
 
-`numren` is a command line tool (written in [Ruby][Ruby]) that renames files with a filename
-consisting of a number part and a name part separated by an underscore,
-like e.g. `01_Sample.txt`.
+`numren` is a command line tool (written in [Ruby][Ruby])
+that renames files with a filename consisting of a number part
+and a name part, like e.g. `01_Sample.txt`.
 Only the number part is changed, according to the given number.
+
+What is it good for?
+--------------------
+
+I usually organize my material for a project, talk, or the like
+in a logical order using files with numbered filenames, like e. g.
+
+    01_Introduction.txt
+    02_Gnu_Migration.odt
+    02_Gnu_Migration.mpg
+    03_Gnu_Conservation.txt
+    04_Gnat_Populations.txt
+    ...
+
+However, I often end up changing the order of my material.
+`numren` makes the task of renaming these files easier.
+
+Note that the number and the name part must be separated by an underscore.
+Also, the name parts without number should be unique, filenames like
+`01_Example.txt`, `02_Example.txt`, `03_Example.txt`, ...
+probably will cause trouble.
 
 Examples
 --------
