@@ -69,7 +69,7 @@ Requirements
 Documentation
 -------------
 
-`numren --help` prints a brief help message.
+Use `numren --help` to display a brief help message.
 
 If you installed `numren` using `rake install` you can read
 its man page with `man numren`.

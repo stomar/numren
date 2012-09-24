@@ -3,31 +3,18 @@
 #
 # numren - rename files with numbered filenames
 #
-# == Synopsis
-#
-#    numren [options] file[s] number
-#
 # == Description
 #
 # +numren+ renames files with a filename consisting of a number part
 # and a name part separated by an underscore, like e.g. `01_Sample.txt'.
 # Only the number part is changed, according to the given number.
 #
-# == Options
+# == See also
 #
-# -d, --digits NUMBER:: Rename the given files using NUMBER digits (if possible).
+# Use <tt>numren --help</tt> to display a brief help message.
 #
-# -h, --help:: Prints a brief help message and exits.
-#
-# -v, --version:: Prints a brief version information and exits.
-#
-# == Examples
-#
-#   numren 01_Sample.txt 5      # =>  05_Sample.txt
-#   numren 01_Sample.txt +4     # =>  05_Sample.txt
-#   numren 10_Sample.txt -- -1  # =>  09_Sample.txt
-#   numren 01_Sample.txt 001    # => 001_Sample.txt
-#   numren -d 2 010_Sample.txt  # =>  10_Sample.txt
+# The full documentation for +numren+ is available on the
+# project home page.
 #
 # == Author
 #
