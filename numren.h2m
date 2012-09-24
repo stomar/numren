@@ -9,5 +9,5 @@ numren \- rename files with numbered filenames
  numren -d 2 010_Sample.txt  # =>  10_Sample.txt
 
 [See also]
-The full documentation for numren is available on
-the project home page: <https://github.com/stomar/numren/>.
+The full documentation for %PROGNAME% is available on
+the project home page: <%HOMEPAGE%>.
