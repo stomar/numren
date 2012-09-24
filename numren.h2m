@@ -7,3 +7,7 @@ numren \- rename files with numbered filenames
  numren 10_Sample.txt -- -1  # =>  09_Sample.txt
  numren 01_Sample.txt 001    # => 001_Sample.txt
  numren -d 2 010_Sample.txt  # =>  10_Sample.txt
+
+[See also]
+The full documentation for numren is available on
+the project home page: <https://github.com/stomar/numren/>.
