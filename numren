@@ -21,17 +21,6 @@
 # Copyright (C) 2011-2012 Marcus Stollsteimer
 #
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
-#
-#--
-# == TODO
-#
-# -i, --insert-at NUMBER:: Increase number by 1 for all files with number >= NUMBER.
-#
-# -n, --no-act:: Do not rename files, only print old and new filenames.
-#
-# --silent, --quiet:: Do not produce any progress messages.
-#
-#++
 
 require 'optparse'
 
