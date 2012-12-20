@@ -1,6 +1,3 @@
-[Name]
-numren \- rename files with numbered filenames
-
 [Examples]
  numren 01_Sample.txt 5      # =>  05_Sample.txt
  numren 01_Sample.txt +4     # =>  05_Sample.txt
