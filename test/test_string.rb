@@ -1,4 +1,3 @@
-#!/usr/bin/ruby -w
 # test_string.rb: Unit tests for the numren script.
 #
 # Copyright (C) 2011-2012 Marcus Stollsteimer
