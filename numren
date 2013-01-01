@@ -59,9 +59,7 @@ module Numren
     # +filename+ - a valid filename (an +ArgumentError+ may be raised)
     def initialize(filename)
       parts = split_filename(filename)
-
-      # valid filename? if not, raise exception
-      if parts.nil?
+      unless parts
         raise(ArgumentError, "`#{filename}' not of the form `number_name'.",
               caller)
       end
@@ -70,7 +68,7 @@ module Numren
       @number = number_str.to_i
       @digits = number_str.size
 
-      assert(!@number.nil? && !@name.nil? && !@digits.nil?)
+      assert(@number && @name && @digits)
     end
 
     # Returns the numbered filename as string.
@@ -218,7 +216,7 @@ module Numren
       opt_parser.parse!(argv)
 
       # check number of arguments left in argv and option argument values
-      if options[:digits].nil?  # -d option not set
+      if !options[:digits]
         # only file[s] and number should be left (at least 2 arguments)
         raise(ArgumentError, 'wrong number of arguments')       if argv.size < 2
         raise(ArgumentError, 'last argument must be a number')  unless argv[-1].is_i?
@@ -270,7 +268,7 @@ module Numren
 
         # create new filename
         begin
-          if options[:digits].nil?
+          if !options[:digits]
             fn.set_number(options[:number])
           else  # -d option set
             fn.set_digits(options[:digits])
