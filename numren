@@ -144,7 +144,7 @@ module Numren
       parts = filename.split('_')
 
       # error if trailing or no '_' || first part not a valid number  FIXME: +01_Sample.txt valid!
-      return nil  unless (parts.size > 1 && parts[0].is_i?)
+      return  unless (parts.size > 1 && parts[0].is_i?)
 
       number_str = parts[0]
       name       = parts[1..-1].join('_')
