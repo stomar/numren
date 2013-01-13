@@ -74,13 +74,13 @@ describe Numren::Filename do
     @fn.set_number '010'
     @fn.to_s.must_equal '010_Sample.dat'
 
-    @fn.set_digits(2).must_equal true
+    @fn.set_digits(2)
     @fn.to_s.must_equal '10_Sample.dat'
   end
 
   it 'sets its number of digits only if possible' do
     @fn.set_number 10
-    @fn.set_digits(1).must_equal false
+    @fn.set_digits(1)
     @fn.to_s.must_equal '10_Sample.dat'
   end
 end

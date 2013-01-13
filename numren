@@ -118,17 +118,12 @@ module Numren
     end
 
     # Sets number of digits if possible
-    # (not to less than to the number of digits
-    # of +@number+ without any padding).
+    # (the number of digits cannot be less than that for the unpadded number).
     #
     # +digits+ - new number of digits
-    #
-    # Returns true if +@digits+ is set to new number, false otherwise.
     def set_digits(digits)
-      return false  if @number.to_s.size > digits
+      return  if @number.to_s.size > digits
       @digits = digits
-
-      true
     end
 
     private
