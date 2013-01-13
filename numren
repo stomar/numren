@@ -280,7 +280,6 @@ module Numren
         end
         new_filename = fn.to_s
 
-        # filenames are identical
         if new_filename == filename
           warn("`#{filename}' and `#{new_filename}' are the same file. (Skipped.)")
           next
