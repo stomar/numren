@@ -240,19 +240,20 @@ module Numren
 
     ERRORCODE = {:general => 1, :usage => 2}
 
-    # The main program.
-    def self.run!
-
-      # parse options
+    def initialize
       begin
         options = Optionparser.parse!(ARGV)
       rescue => e
         usage_fail(e.message)
       end
+      @files = options[:files]
+      @number = options[:number]
+      @digits = options[:digits]
+    end
 
-      # main body #
-
-      options[:files].each do |filename|
+    # The main program.
+    def run!
+      @files.each do |filename|
         unless File.exist?(filename)
           warn "There is no file `#{filename}'. (Skipped.)"
           next
@@ -268,10 +269,10 @@ module Numren
 
         # create new filename
         begin
-          if !options[:digits]
-            fn.set_number(options[:number])
+          if !@digits
+            fn.set_number(@number)
           else  # -d option set
-            fn.set_digits(options[:digits])
+            fn.set_digits(@digits)
           end
         rescue RuntimeError => e
           warn("#{e.message} (Skipped.)")
@@ -296,12 +297,14 @@ module Numren
       end   # of each
     end
 
+    private
+
     # Asks for yes or no (y/n).
     #
     # +question+ - string to be printed
     #
     # Returns +true+ if the answer is yes.
-    def self.ask(question) # :nodoc:
+    def ask(question)
       loop do
         $stderr.print "#{question} [y/n] "
         reply = $stdin.gets.chomp.downcase  # $stdin: avoids gets / ARGV problem
@@ -312,7 +315,7 @@ module Numren
     end
 
     # Prints an error message and a short help information, then exits.
-    def self.usage_fail(message) # :nodoc:
+    def usage_fail(message)
       warn "#{PROGNAME}: #{message}"
       warn "Use `#{PROGNAME} --help' for valid options."
       exit ERRORCODE[:usage]
@@ -322,7 +325,7 @@ module Numren
 ### call main method only if called on command line
 
 if __FILE__ == $0
-  Application.run!
+  Application.new.run!
 end
 
 end  # module
