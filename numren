@@ -135,15 +135,9 @@ module Numren
     # Returns the array [number_str, name] or
     # +nil+ if +filename+ is not of the form `number_name'.
     def split_filename(filename)
+      return  unless /\A\d+_.+/ =~ filename
 
-      parts = filename.split('_')
-
-      # error if trailing or no '_' || first part not a valid number  FIXME: +01_Sample.txt valid!
-      return  unless (parts.size > 1 && parts[0].is_i?)
-
-      number_str = parts[0]
-      name       = parts[1..-1].join('_')
-
+      number_str, name = filename.split('_', 2)
       assert(filename == "#{number_str}_#{name}")
 
       [number_str, name]
