@@ -58,13 +58,7 @@ module Numren
     #
     # +filename+ - a valid filename (an +ArgumentError+ may be raised)
     def initialize(filename)
-      parts = split_filename(filename)
-      unless parts
-        raise(ArgumentError, "`#{filename}' not of the form `number_name'.",
-              caller)
-      end
-
-      number_str, @name = parts
+      number_str, @name = split_filename(filename)
       @number = number_str.to_i
       @digits = number_str.size
 
@@ -132,10 +126,13 @@ module Numren
     #
     # +filename+ - string of the form `number_name'
     #
-    # Returns the array [number_str, name] or
-    # +nil+ if +filename+ is not of the form `number_name'.
+    # Returns the array [number_str, name] or raises an
+    # +ArgumentError+ if +filename+ is not of the form `number_name'.
     def split_filename(filename)
-      return  unless /\A\d+_.+/ =~ filename
+      unless /\A\d+_.+/ =~ filename
+        raise(ArgumentError, "`#{filename}' not of the form `number_name'.",
+              caller)
+      end
 
       number_str, name = filename.split('_', 2)
       assert(filename == "#{number_str}_#{name}")
