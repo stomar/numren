@@ -59,7 +59,7 @@ describe Numren::Filename do
     @fn.to_s.must_equal '00_Sample.dat'
   end
 
-  it 'can not decrease its number part below 0' do
+  it 'cannot decrease its number part below 0' do
     lambda { @fn.set_number '-2' }.must_raise RuntimeError
   end
 

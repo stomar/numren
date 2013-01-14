@@ -101,7 +101,7 @@ module Numren
         new_num = @number - num.to_i
         if new_num < 0
           raise(RuntimeError,
-                "`#{@number.to_s.rjust(@digits, '0')}' can not be decreased by #{num}.", caller)
+                "`#{@number.to_s.rjust(@digits, '0')}' cannot be decreased by #{num}.", caller)
         end
         @number = new_num
       else
