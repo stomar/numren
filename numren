@@ -255,10 +255,10 @@ module Numren
 
         # create new filename
         begin
-          if !@digits
-            fn.set_number(@number)
-          else  # -d option set
+          if @digits
             fn.set_digits(@digits)
+          else
+            fn.set_number(@number)
           end
         rescue RuntimeError => e
           warn("#{e.message} (Skipped.)")
