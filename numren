@@ -86,10 +86,8 @@ module Numren
     #
     # +number_str+ - string with new number part of filename
     # (may also be an integer) or a string like '+5' or '-3'
-    def set_number(number_str)  # might be integer
-      head, sign, num = number_str.to_s.rpartition(/\A[+-]/)
-        # '-01' => ['', '-', '01'], '01' => ['', '', '01']
-      assert head.empty?
+    def set_number(number_str)
+      sign, num = number_str.to_s.scan(/\A([+-]?)(\d+)\Z/).flatten
 
       # increase number of digits if necessary
       @digits = num.size  if num.size > @digits
