@@ -89,12 +89,12 @@ module Numren
     def set_number(number_str)
       sign, num = number_str.to_s.scan(/\A([+-]?)(\d+)\Z/).flatten
 
-      # increase number of digits if necessary
-      @digits = num.size  if num.size > @digits
+      set_digits(num.size)  if num.size > @digits
 
       case sign
       when '+'
         @number = @number + num.to_i
+        set_digits(@number.to_s.size)  if @number.to_s.size > @digits
       when '-'
         new_num = @number - num.to_i
         if new_num < 0
@@ -105,8 +105,6 @@ module Numren
       else
         @number = num.to_i
       end
-      # increase number of digits if necessary (only applies to incremented numbers)
-      @digits = @number.to_s.size  if @number.to_s.size > @digits
     end
 
     # Sets number of digits if possible
@@ -114,8 +112,7 @@ module Numren
     #
     # +digits+ - new number of digits
     def set_digits(digits)
-      return  if @number.to_s.size > digits
-      @digits = digits
+      @digits = digits  if digits >= @number.to_s.size
     end
 
     private
