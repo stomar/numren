@@ -80,21 +80,21 @@ module Numren
     # Examples:
     #
     #   fn = Numren::Filename.new('01_Sample.txt')
-    #   fn.set_number(2)     and fn.to_s  # => 02_Sample.txt
-    #   fn.set_number('001') and fn.to_s  # => 001_Sample.txt
-    #   fn.set_number('+01') and fn.to_s  # => 002_Sample.txt
+    #   fn.number = 2     and fn.to_s  # => 02_Sample.txt
+    #   fn.number = '001' and fn.to_s  # => 001_Sample.txt
+    #   fn.number = '+01' and fn.to_s  # => 002_Sample.txt
     #
     # +number_str+ - string with new number part of filename
     # (may also be an integer) or a string like '+5' or '-3'
-    def set_number(number_str)
+    def number=(number_str)
       sign, num = number_str.to_s.scan(/\A([+-]?)(\d+)\Z/).flatten
 
-      set_digits(num.size)  if num.size > @digits
+      self.digits = num.size  if num.size > @digits
 
       case sign
       when '+'
         @number = @number + num.to_i
-        set_digits(@number.to_s.size)  if @number.to_s.size > @digits
+        self.digits = @number.to_s.size  if @number.to_s.size > @digits
       when '-'
         new_num = @number - num.to_i
         if new_num < 0
@@ -111,7 +111,7 @@ module Numren
     # (the number of digits cannot be less than that for the unpadded number).
     #
     # +digits+ - new number of digits
-    def set_digits(digits)
+    def digits=(digits)
       @digits = digits  if digits >= @number.to_s.size
     end
 
@@ -251,9 +251,9 @@ module Numren
         # create new filename
         begin
           if @digits
-            fn.set_digits(@digits)
+            fn.digits = @digits
           else
-            fn.set_number(@number)
+            fn.number = @number
           end
         rescue RuntimeError => e
           warn("#{e.message} (Skipped.)")

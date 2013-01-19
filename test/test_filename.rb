@@ -36,51 +36,51 @@ describe Numren::Filename do
   end
 
   it 'can set its number part' do
-    @fn.set_number 2      # a number
+    @fn.number = 2      # a number
     @fn.to_s.must_equal '02_Sample.dat'
-    @fn.set_number '001'  # a string
+    @fn.number = '001'  # a string
     @fn.to_s.must_equal '001_Sample.dat'
-    @fn.set_number 0      # zero
+    @fn.number = 0      # zero
     @fn.to_s.must_equal '000_Sample.dat'
   end
 
   it 'can increase its number part' do
-    @fn.set_number '+2'
+    @fn.number = '+2'
     @fn.to_s.must_equal '03_Sample.dat'
-    @fn.set_number '+101'
+    @fn.number = '+101'
     @fn.to_s.must_equal '104_Sample.dat'
   end
 
   it 'can decrease its number part' do
-    @fn.set_number 11
-    @fn.set_number '-2'
+    @fn.number = 11
+    @fn.number = '-2'
     @fn.to_s.must_equal '09_Sample.dat'
-    @fn.set_number '-9'
+    @fn.number = '-9'
     @fn.to_s.must_equal '00_Sample.dat'
   end
 
   it 'cannot decrease its number part below 0' do
-    lambda { @fn.set_number '-2' }.must_raise RuntimeError
+    lambda { @fn.number = '-2' }.must_raise RuntimeError
   end
 
   it 'updates the number of digits (if necessary) when increasing' do
-    @fn.set_number '99'
-    @fn.set_number '+1'
-    @fn.set_number '-1'
+    @fn.number = '99'
+    @fn.number = '+1'
+    @fn.number = '-1'
     @fn.to_s.must_equal '099_Sample.dat'
   end
 
   it 'can set its number of digits' do
-    @fn.set_number '010'
+    @fn.number = '010'
     @fn.to_s.must_equal '010_Sample.dat'
 
-    @fn.set_digits(2)
+    @fn.digits = 2
     @fn.to_s.must_equal '10_Sample.dat'
   end
 
   it 'sets its number of digits only if possible' do
-    @fn.set_number 10
-    @fn.set_digits(1)
+    @fn.number = 10
+    @fn.digits = 1
     @fn.to_s.must_equal '10_Sample.dat'
   end
 end
