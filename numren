@@ -71,40 +71,33 @@ module Numren
     end
 
     # Sets the number part of the filename.
-    # If possible, the number of digits is kept
-    # (by padding with zeros if necessary).
-    # If not, the number of digits is updated.
-    # Raises a +RuntimeError+ if the number
-    # would be set to a negative integer.
+    # The number of digits is never decreased by this method, but
+    # it might be increased to the necessary number of digits or
+    # to the number of digits of the passed +number_str+.
+    #
+    # Raises a +RuntimeError+ if the new number part would be negative.
     #
     # Examples:
     #
     #   fn = Numren::Filename.new('01_Sample.txt')
-    #   fn.number = 2     and fn.to_s  # => 02_Sample.txt
+    #   fn.number = '2'   and fn.to_s  # => 02_Sample.txt
     #   fn.number = '001' and fn.to_s  # => 001_Sample.txt
     #   fn.number = '+01' and fn.to_s  # => 002_Sample.txt
     #
-    # +number_str+ - string with new number part of filename
-    # (may also be an integer) or a string like '+5' or '-3'
+    # +number_str+ - string with new number part of filename,
+    #  like '42', '+5' or '-003'
     def number=(number_str)
-      sign, num = number_str.to_s.scan(/\A([+-]?)(\d+)\Z/).flatten
+      is_change = number_str =~ /\A[+-]/
+      new_digits = number_str[/\d+/].size
 
-      self.digits = num.size  if num.size > @digits
+      num = number_str.to_i
+      new_number = is_change ? @number + num : num
 
-      case sign
-      when '+'
-        @number = @number + num.to_i
-        self.digits = @number.to_s.size  if @number.to_s.size > @digits
-      when '-'
-        new_num = @number - num.to_i
-        if new_num < 0
-          raise(RuntimeError,
-                "`#{@number.to_s.rjust(@digits, '0')}' cannot be decreased by #{num}.", caller)
-        end
-        @number = new_num
-      else
-        @number = num.to_i
-      end
+      message = "`#{@number}' cannot be changed by #{num}."
+      raise(RuntimeError, message, caller)  if new_number < 0
+
+      @number = new_number
+      self.digits = [new_digits, @number.to_s.size, @digits].max
     end
 
     # Sets number of digits if possible

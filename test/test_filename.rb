@@ -36,11 +36,11 @@ describe Numren::Filename do
   end
 
   it 'can set its number part' do
-    @fn.number = 2      # a number
+    @fn.number = '2'
     @fn.to_s.must_equal '02_Sample.dat'
-    @fn.number = '001'  # a string
+    @fn.number = '001'
     @fn.to_s.must_equal '001_Sample.dat'
-    @fn.number = 0      # zero
+    @fn.number = '0'
     @fn.to_s.must_equal '000_Sample.dat'
   end
 
@@ -52,7 +52,7 @@ describe Numren::Filename do
   end
 
   it 'can decrease its number part' do
-    @fn.number = 11
+    @fn.number = '11'
     @fn.number = '-2'
     @fn.to_s.must_equal '09_Sample.dat'
     @fn.number = '-9'
@@ -79,7 +79,7 @@ describe Numren::Filename do
   end
 
   it 'sets its number of digits only if possible' do
-    @fn.number = 10
+    @fn.number = '10'
     @fn.digits = 1
     @fn.to_s.must_equal '10_Sample.dat'
   end
