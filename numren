@@ -119,10 +119,8 @@ module Numren
     # Returns the array [number_str, name] or raises an
     # +ArgumentError+ if +filename+ is not of the form `number_name'.
     def split_filename(filename)
-      unless /\A\d+_.+/ =~ filename
-        raise(ArgumentError, "`#{filename}' not of the form `number_name'.",
-              caller)
-      end
+      message = "`#{filename}' not of the form `number_name'."
+      raise(ArgumentError, message, caller)  unless /\A\d+_.+/ =~ filename
 
       number_part, name_part = filename.split('_', 2)
       assert(filename == "#{number_part}_#{name_part}")
