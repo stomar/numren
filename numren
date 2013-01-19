@@ -64,7 +64,7 @@ module Numren
       @number = number_str.to_i
       @digits = number_str.size
 
-      assert(@number && @name && @digits)
+      to_s == filename  or fail 'assertion failure'
     end
 
     # Returns the numbered filename as string.
@@ -123,14 +123,8 @@ module Numren
       raise(ArgumentError, message, caller)  unless /\A\d+_.+/ =~ filename
 
       number_part, name_part = filename.split('_', 2)
-      assert(filename == "#{number_part}_#{name_part}")
 
       [number_part, name_part]
-    end
-
-    # Fails when expression is not true.
-    def assert(expression)
-      fail 'assertion failure'  unless expression
     end
   end
 
