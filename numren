@@ -54,6 +54,8 @@ module Numren
   # an +ArgumentError+ is raised.
   class Filename
 
+    attr_reader :name, :number, :digits
+
     # Initializes +Filename+ instances.
     #
     # +filename+ - a valid filename (an +ArgumentError+ may be raised)
@@ -67,7 +69,7 @@ module Numren
 
     # Returns the numbered filename as string.
     def to_s
-      "#{@number.to_s.rjust(@digits, '0')}_#{@name}"
+      "#{number.to_s.rjust(digits, '0')}_#{name}"
     end
 
     # Sets the number part of the filename.
@@ -91,21 +93,21 @@ module Numren
       new_digits = number_str[/\d+/].size
 
       num = number_str.to_i
-      new_number = is_change ? @number + num : num
+      new_number = is_change ? number + num : num
 
-      message = "`#{@number}' cannot be changed by #{num}."
+      message = "`#{number}' cannot be changed by #{num}."
       raise(RuntimeError, message, caller)  if new_number < 0
 
       @number = new_number
-      self.digits = [new_digits, @number.to_s.size, @digits].max
+      self.digits = [new_digits, number.to_s.size, digits].max
     end
 
     # Sets number of digits if possible
     # (the number of digits cannot be less than that for the unpadded number).
     #
-    # +digits+ - new number of digits
-    def digits=(digits)
-      @digits = digits  if digits >= @number.to_s.size
+    # +new_digits+ - new number of digits
+    def digits=(new_digits)
+      @digits = new_digits  if new_digits >= number.to_s.size
     end
 
     private
@@ -122,10 +124,10 @@ module Numren
               caller)
       end
 
-      number_str, name = filename.split('_', 2)
-      assert(filename == "#{number_str}_#{name}")
+      number_part, name_part = filename.split('_', 2)
+      assert(filename == "#{number_part}_#{name_part}")
 
-      [number_str, name]
+      [number_part, name_part]
     end
 
     # Fails when expression is not true.
