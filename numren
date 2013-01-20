@@ -48,17 +48,21 @@ module Numren
               "This is free software: you are free to change and redistribute it.\n" +
               "There is NO WARRANTY, to the extent permitted by law."
 
+  # An internal error class.
+  class FilenameError < StandardError
+  end
+
   # The class for numbered filenames.
   # Instances must be initialized with a string containing
   # a valid filename of the form 'Number_Text', or else
-  # an +ArgumentError+ is raised.
+  # a +FilenameError+ is raised.
   class Filename
 
     attr_reader :name, :number, :digits
 
     # Initializes +Filename+ instances.
     #
-    # +filename+ - a valid filename (an +ArgumentError+ may be raised)
+    # +filename+ - a valid filename (a +FilenameError+ may be raised)
     def initialize(filename)
       number_str, @name = split_filename(filename)
       @number = number_str.to_i
@@ -77,7 +81,7 @@ module Numren
     # it might be increased to the necessary number of digits or
     # to the number of digits of the passed +number_str+.
     #
-    # Raises a +RuntimeError+ if the new number part would be negative.
+    # Raises a +FilenameError+ if the new number part would be negative.
     #
     # Examples:
     #
@@ -96,7 +100,7 @@ module Numren
       new_number = is_change ? number + num : num
 
       message = "`#{number}' cannot be changed by #{num}."
-      raise(RuntimeError, message, caller)  if new_number < 0
+      raise(FilenameError, message, caller)  if new_number < 0
 
       @number = new_number
       self.digits = [new_digits, number.to_s.size, digits].max
@@ -116,11 +120,11 @@ module Numren
     #
     # +filename+ - string of the form `number_name'
     #
-    # Returns the array [number_str, name] or raises an
-    # +ArgumentError+ if +filename+ is not of the form `number_name'.
+    # Returns the array [number_string, name] or raises a
+    # +FilenameError+ if +filename+ is not of the form `number_name'.
     def split_filename(filename)
       message = "`#{filename}' not of the form `number_name'."
-      raise(ArgumentError, message, caller)  unless /\A\d+_.+/ =~ filename
+      raise(FilenameError, message, caller)  unless /\A\d+_.+/ =~ filename
 
       number_part, name_part = filename.split('_', 2)
 
@@ -235,7 +239,7 @@ module Numren
             fn.number = @number
           end
           new_filename = fn.to_s
-        rescue ArgumentError, RuntimeError => e
+        rescue FilenameError => e
           warn("#{e.message} (Skipped.)")
           next
         end

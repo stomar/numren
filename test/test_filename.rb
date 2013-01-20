@@ -20,15 +20,15 @@ describe Numren::Filename do
   end
 
   it 'should not accept ill-formed filenames' do
-    assert_raises(ArgumentError) { Numren::Filename.new('Sample.dat') }
-    assert_raises(ArgumentError) { Numren::Filename.new('_Sample.dat') }
-    assert_raises(ArgumentError) { Numren::Filename.new('01_') }
+    assert_raises(Numren::FilenameError) { Numren::Filename.new('Sample.dat') }
+    assert_raises(Numren::FilenameError) { Numren::Filename.new('_Sample.dat') }
+    assert_raises(Numren::FilenameError) { Numren::Filename.new('01_') }
   end
 
   it 'should only accept filenames starting with a number part' do
-    assert_raises(ArgumentError) { Numren::Filename.new('AB_Sample.dat') }
-    assert_raises(ArgumentError) { Numren::Filename.new('0A_Sample.dat') }
-    assert_raises(ArgumentError) { Numren::Filename.new('A0_Sample.dat') }
+    assert_raises(Numren::FilenameError) { Numren::Filename.new('AB_Sample.dat') }
+    assert_raises(Numren::FilenameError) { Numren::Filename.new('0A_Sample.dat') }
+    assert_raises(Numren::FilenameError) { Numren::Filename.new('A0_Sample.dat') }
   end
 
   it 'can be converted to string' do
@@ -60,7 +60,7 @@ describe Numren::Filename do
   end
 
   it 'cannot decrease its number part below 0' do
-    lambda { @fn.number = '-2' }.must_raise RuntimeError
+    lambda { @fn.number = '-2' }.must_raise Numren::FilenameError
   end
 
   it 'updates the number of digits (if necessary) when increasing' do
