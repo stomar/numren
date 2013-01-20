@@ -227,26 +227,18 @@ module Numren
           next
         end
 
-        # initialize filename
         begin
           fn = Filename.new(filename)
-        rescue ArgumentError => e
-          warn("#{e.message} (Skipped.)")
-          next
-        end
-
-        # create new filename
-        begin
           if @digits
             fn.digits = @digits
           else
             fn.number = @number
           end
-        rescue RuntimeError => e
+          new_filename = fn.to_s
+        rescue ArgumentError, RuntimeError => e
           warn("#{e.message} (Skipped.)")
           next
         end
-        new_filename = fn.to_s
 
         if new_filename == filename
           warn("`#{filename}' and `#{new_filename}' are the same file. (Skipped.)")
@@ -254,7 +246,7 @@ module Numren
         end
 
         secure_rename(filename, new_filename)
-      end   # of each
+      end
     end
 
     private
