@@ -35,6 +35,13 @@ describe Numren::Filename do
     @fn.to_s.must_equal '01_Sample.dat'
   end
 
+  it 'can be compared to a string' do
+    @fn.must_equal '01_Sample.dat'
+    '01_Sample.dat'.must_equal @fn
+    @fn.wont_equal '02_Sample.dat'
+    '02_Sample.dat'.wont_equal @fn
+  end
+
   it 'can set its number part' do
     @fn.number = '2'
     @fn.to_s.must_equal '02_Sample.dat'

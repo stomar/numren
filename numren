@@ -57,6 +57,7 @@ module Numren
   # a valid filename of the form 'Number_Text', or else
   # a +FilenameError+ is raised.
   class Filename
+    include Comparable
 
     attr_reader :name, :number, :digits
 
@@ -74,6 +75,14 @@ module Numren
     # Returns the numbered filename as string.
     def to_s
       "#{number.to_s.rjust(digits, '0')}_#{name}"
+    end
+
+    # Allows a Filename to act like a String.
+    alias :to_str :to_s
+
+    # Compare Filename objects based on their string representation.
+    def <=>(other)
+      to_s <=> other
     end
 
     # Sets the number part of the filename.
@@ -232,13 +241,12 @@ module Numren
         end
 
         begin
-          fn = Filename.new(filename)
+          new_filename = Filename.new(filename)
           if @digits
-            fn.digits = @digits
+            new_filename.digits = @digits
           else
-            fn.number = @number
+            new_filename.number = @number
           end
-          new_filename = fn.to_s
         rescue FilenameError => e
           warn("#{e.message} (Skipped.)")
           next
