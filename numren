@@ -235,10 +235,7 @@ module Numren
     # The main program.
     def run!
       @files.each do |filename|
-        unless File.exist?(filename)
-          warn "There is no file `#{filename}'. (Skipped.)"
-          next
-        end
+        next  unless file_exist?(filename)
 
         begin
           new_filename = Filename.new(filename)
@@ -252,16 +249,25 @@ module Numren
           next
         end
 
-        if new_filename == filename
-          warn("`#{filename}' and `#{new_filename}' are the same file. (Skipped.)")
-          next
-        end
+        next  unless files_different?(filename, new_filename)
 
         secure_rename(filename, new_filename)
       end
     end
 
     private
+
+    def file_exist?(filename)
+      fail_message = "There is no file `#{filename}'. (Skipped.)"
+
+      File.exist?(filename)  or warn fail_message
+    end
+
+    def files_different?(filename1, filename2)
+      fail_message = "`#{filename1}' and `#{filename2}' are the same file. (Skipped.)"
+
+      filename1 != filename2  or warn fail_message
+    end
 
     def secure_rename(old_filename, new_filename)
       return  if File.exist?(new_filename) && !overwrite?(new_filename)
