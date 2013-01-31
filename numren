@@ -245,7 +245,7 @@ module Numren
             new_filename.number = @number
           end
         rescue FilenameError => e
-          warn("#{e.message} (Skipped.)")
+          skip_warn(e.message)
           next
         end
 
@@ -257,16 +257,20 @@ module Numren
 
     private
 
-    def file_exist?(filename)
-      fail_message = "There is no file `#{filename}'. (Skipped.)"
+    def skip_warn(message)
+      warn "#{message} (Skipped.)"
+    end
 
-      File.exist?(filename)  or warn fail_message
+    def file_exist?(filename)
+      fail_message = "There is no file `#{filename}'."
+
+      File.exist?(filename)  or skip_warn(fail_message)
     end
 
     def files_different?(filename1, filename2)
-      fail_message = "`#{filename1}' and `#{filename2}' are the same file. (Skipped.)"
+      fail_message = "`#{filename1}' and `#{filename2}' are the same file."
 
-      filename1 != filename2  or warn fail_message
+      filename1 != filename2  or skip_warn(fail_message)
     end
 
     def secure_rename(old_filename, new_filename)
