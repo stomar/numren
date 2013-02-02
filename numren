@@ -43,10 +43,12 @@ module Numren
   HOMEPAGE  = 'https://github.com/stomar/numren/'
   TAGLINE   = 'rename files with numbered filenames'
 
-  COPYRIGHT = "Copyright (C) 2011-2013 Marcus Stollsteimer.\n" +
-              "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.\n" +
-              "This is free software: you are free to change and redistribute it.\n" +
-              "There is NO WARRANTY, to the extent permitted by law."
+  COPYRIGHT = <<-copyright.gsub(/^ +/, '')
+    Copyright (C) 2011-2013 Marcus Stollsteimer.
+    License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
+    This is free software: you are free to change and redistribute it.
+    There is NO WARRANTY, to the extent permitted by law.
+  copyright
 
   # An internal error class.
   class FilenameError < StandardError
@@ -163,13 +165,13 @@ module Numren
       opt_parser = OptionParser.new do |opt|
         opt.banner = "Usage: #{PROGNAME} [options] file[s] number \n" +
                      "   or: #{PROGNAME} -d NUMBER file[s]"
-        opt.separator ''
-        opt.separator 'numren renames files with a filename consisting of a number part'
-        opt.separator "and a name part separated by an underscore, like e.g. `01_Sample.txt'."
-        opt.separator 'Only the number part is changed, according to the given number.'
-        opt.separator ''
-        opt.separator 'Options'
-        opt.separator ''
+        opt.separator %q{
+          numren renames files with a filename consisting of a number part
+          and a name part separated by an underscore, like e.g. `01_Sample.txt'.
+          Only the number part is changed, according to the given number.
+
+          Options
+        }.gsub(/^ +/, '')
 
         # process --version and --help first,
         # exit successfully (GNU Coding Standards)
