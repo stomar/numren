@@ -2,7 +2,6 @@
 #
 # Copyright (C) 2011-2014 Marcus Stollsteimer
 
-require 'minitest/spec'
 require 'minitest/autorun'
 load 'numren'  unless defined?(Numren)
 
