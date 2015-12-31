@@ -170,7 +170,7 @@ module Numren
           and a name part separated by an underscore, like e.g. `01_Sample.txt'.
           Only the number part is changed, according to the given number.
 
-          Options
+          Options:
         }.gsub(/^ +/, '')
 
         # process --version and --help first,
