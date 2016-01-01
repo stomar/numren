@@ -1,6 +1,6 @@
 # test_filename.rb: Unit tests for the numren script.
 #
-# Copyright (C) 2011-2015 Marcus Stollsteimer
+# Copyright (C) 2011-2016 Marcus Stollsteimer
 
 require 'minitest/autorun'
 load 'numren'  unless defined?(Numren)

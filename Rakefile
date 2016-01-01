@@ -1,6 +1,6 @@
 # rakefile for the numren script.
 #
-# Copyright (C) 2011-2015 Marcus Stollsteimer
+# Copyright (C) 2011-2016 Marcus Stollsteimer
 
 require 'rake/testtask'
 
