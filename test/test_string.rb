@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-# test_string.rb: Unit tests for the numren script.
-#
-# Copyright (C) 2011-2018 Marcus Stollsteimer
-
 require "minitest/autorun"
 load "numren"  unless defined?(Numren)
 
