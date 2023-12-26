@@ -59,6 +59,7 @@ module Numren
   # a valid filename of the form 'Number_Text', or else
   # a +FilenameError+ is raised.
   class Filename
+
     include Comparable
 
     attr_reader :name, :number, :digits
@@ -71,7 +72,7 @@ module Numren
       @number = number_str.to_i
       @digits = number_str.size
 
-      to_s == filename  or fail "assertion failure"
+      to_s == filename or fail "assertion failure"
     end
 
     # Returns the numbered filename as string.
@@ -155,7 +156,6 @@ module Numren
     #
     # Returns a hash containing the option parameters.
     def self.parse!(argv)
-
       options = {
         files: nil,
         number: nil,
@@ -191,6 +191,7 @@ module Numren
         opt.on("-d", "--digits NUMBER", Integer,
                "Rename the given files using NUMBER digits (if possible).") do |d|
           raise(OptionParser::InvalidArgument, d)  unless d > 0
+
           options[:digits] = d
         end
 
@@ -202,6 +203,7 @@ module Numren
       unless options[:digits]
         raise(ArgumentError, "wrong number of arguments")  if argv.size < 2
         raise(ArgumentError, "last argument must be a number")  unless argv.last.is_i?
+
         options[:number] = argv.pop
       end
 
@@ -220,7 +222,7 @@ module Numren
   # It parses the command line arguments and renames the files.
   class Application
 
-    ERRORCODE = {general: 1, usage: 2}
+    ERRORCODE = { general: 1, usage: 2 }
 
     def initialize
       begin
@@ -265,13 +267,13 @@ module Numren
     def file_exist?(filename)
       fail_message = "There is no file `#{filename}'."
 
-      File.exist?(filename)  or skip_warn(fail_message)
+      File.exist?(filename) or skip_warn(fail_message)
     end
 
     def files_different?(filename1, filename2)
       fail_message = "`#{filename1}' and `#{filename2}' are the same file."
 
-      filename1 != filename2  or skip_warn(fail_message)
+      filename1 != filename2 or skip_warn(fail_message)
     end
 
     def secure_rename(old_filename, new_filename)
@@ -295,6 +297,7 @@ module Numren
         $stderr.print "#{question} [y/n] "
         reply = $stdin.gets.chomp.downcase  # $stdin avoids gets/ARGV problem
         return reply == "y"  if /\A[yn]\Z/ =~ reply
+
         warn "Please answer `y' or `n'."
       end
     end
