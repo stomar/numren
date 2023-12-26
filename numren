@@ -22,7 +22,7 @@
 #
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
 
-require 'optparse'
+require "optparse"
 
 class String
 
@@ -37,13 +37,13 @@ end
 # This module contains the classes for the +numren+ tool.
 module Numren
 
-  PROGNAME  = 'numren'
-  VERSION   = '1.0.0'
-  DATE      = '2012-03-17'
-  HOMEPAGE  = 'https://github.com/stomar/numren/'
-  TAGLINE   = 'rename files with numbered filenames'
+  PROGNAME  = "numren"
+  VERSION   = "1.0.0"
+  DATE      = "2012-03-17"
+  HOMEPAGE  = "https://github.com/stomar/numren/"
+  TAGLINE   = "rename files with numbered filenames"
 
-  COPYRIGHT = <<-copyright.gsub(/^ +/, '')
+  COPYRIGHT = <<-copyright.gsub(/^ +/, "")
     Copyright (C) 2011-2018 Marcus Stollsteimer.
     License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
     This is free software: you are free to change and redistribute it.
@@ -71,7 +71,7 @@ module Numren
       @number = number_str.to_i
       @digits = number_str.size
 
-      to_s == filename  or fail 'assertion failure'
+      to_s == filename  or fail "assertion failure"
     end
 
     # Returns the numbered filename as string.
@@ -137,7 +137,7 @@ module Numren
       message = "`#{filename}' not of the form `number_name'."
       raise(FilenameError, message, caller)  unless /\A\d+_.+/ =~ filename
 
-      number_part, name_part = filename.split('_', 2)
+      number_part, name_part = filename.split("_", 2)
 
       [number_part, name_part]
     end
@@ -171,42 +171,42 @@ module Numren
           Only the number part is changed, according to the given number.
 
           Options:
-        }.gsub(/^ +/, '')
+        }.gsub(/^ +/, "")
 
         # process --version and --help first,
         # exit successfully (GNU Coding Standards)
-        opt.on_tail('-h', '--help', 'Print a brief help message and exit.') do
+        opt.on_tail("-h", "--help", "Print a brief help message and exit.") do
           puts opt_parser
           puts "\nReport bugs on the #{PROGNAME} home page: <#{HOMEPAGE}>"
           exit
         end
 
-        opt.on_tail('-v', '--version',
-                    'Print a brief version information and exit.') do
+        opt.on_tail("-v", "--version",
+                    "Print a brief version information and exit.") do
           puts "#{PROGNAME} #{VERSION}"
           puts COPYRIGHT
           exit
         end
 
-        opt.on('-d', '--digits NUMBER', Integer,
-               'Rename the given files using NUMBER digits (if possible).') do |d|
+        opt.on("-d", "--digits NUMBER", Integer,
+               "Rename the given files using NUMBER digits (if possible).") do |d|
           raise(OptionParser::InvalidArgument, d)  unless d > 0
           options[:digits] = d
         end
 
-        opt.separator ''
+        opt.separator ""
       end
       opt_parser.parse!(argv)
 
       # last argument must be a number (unless -d option is set)
       unless options[:digits]
-        raise(ArgumentError, 'wrong number of arguments')  if argv.size < 2
-        raise(ArgumentError, 'last argument must be a number')  unless argv.last.is_i?
+        raise(ArgumentError, "wrong number of arguments")  if argv.size < 2
+        raise(ArgumentError, "last argument must be a number")  unless argv.last.is_i?
         options[:number] = argv.pop
       end
 
       # only file[s] should be left (at least 1 argument)
-      raise(ArgumentError, 'wrong number of arguments')  if argv.size < 1
+      raise(ArgumentError, "wrong number of arguments")  if argv.size < 1
 
       options[:files] = Array.new(argv)
       argv.clear
@@ -294,7 +294,7 @@ module Numren
       loop do
         $stderr.print "#{question} [y/n] "
         reply = $stdin.gets.chomp.downcase  # $stdin avoids gets/ARGV problem
-        return reply == 'y'  if /\A[yn]\Z/ =~ reply
+        return reply == "y"  if /\A[yn]\Z/ =~ reply
         warn "Please answer `y' or `n'."
       end
     end
