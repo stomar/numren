@@ -19,15 +19,15 @@ describe Numren::Filename do
   end
 
   it "should not accept ill-formed filenames" do
-    assert_raises(Numren::FilenameError) { Numren::Filename.new("Sample.dat") }
-    assert_raises(Numren::FilenameError) { Numren::Filename.new("_Sample.dat") }
-    assert_raises(Numren::FilenameError) { Numren::Filename.new("01_") }
+    _ { Numren::Filename.new("Sample.dat") }.must_raise(Numren::FilenameError)
+    _ { Numren::Filename.new("_Sample.dat") }.must_raise(Numren::FilenameError)
+    _ { Numren::Filename.new("01_") }.must_raise(Numren::FilenameError)
   end
 
   it "should only accept filenames starting with a number part" do
-    assert_raises(Numren::FilenameError) { Numren::Filename.new("AB_Sample.dat") }
-    assert_raises(Numren::FilenameError) { Numren::Filename.new("0A_Sample.dat") }
-    assert_raises(Numren::FilenameError) { Numren::Filename.new("A0_Sample.dat") }
+    _ { Numren::Filename.new("AB_Sample.dat") }.must_raise(Numren::FilenameError)
+    _ { Numren::Filename.new("0A_Sample.dat") }.must_raise(Numren::FilenameError)
+    _ { Numren::Filename.new("A0_Sample.dat") }.must_raise(Numren::FilenameError)
   end
 
   it "can be converted to string" do
