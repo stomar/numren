@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # rakefile for the numren script.
 #
 # Copyright (C) 2011-2018 Marcus Stollsteimer

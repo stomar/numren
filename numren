@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
+
 # == Name
 #
 # numren - rename files with numbered filenames

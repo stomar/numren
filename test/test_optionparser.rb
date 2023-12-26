@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # test_optionparser.rb: Unit tests for the numren script.
 #
 # Copyright (C) 2011-2018 Marcus Stollsteimer
