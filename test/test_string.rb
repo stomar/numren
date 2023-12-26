@@ -10,26 +10,26 @@ describe String do
 
   describe "when asked if string represents an integer" do
     it "should recognize valid integers" do
-      "3".is_i?.must_equal true
-      "01".is_i?.must_equal true
-      "42".is_i?.must_equal true
-      "123".is_i?.must_equal true
-      "0".is_i?.must_equal true
+      _("3".is_i?).must_equal true
+      _("01".is_i?).must_equal true
+      _("42".is_i?).must_equal true
+      _("123".is_i?).must_equal true
+      _("0".is_i?).must_equal true
     end
 
     it "should recognize non-integers" do
-      "A".is_i?.must_equal false
-      "0A".is_i?.must_equal false
-      "A0".is_i?.must_equal false
-      "".is_i?.must_equal false
+      _("A".is_i?).must_equal false
+      _("0A".is_i?).must_equal false
+      _("A0".is_i?).must_equal false
+      _("".is_i?).must_equal false
     end
 
     it "should recognize signed integers" do
-      "+5".is_i?.must_equal true
-      "-2".is_i?.must_equal true
-      "+02".is_i?.must_equal true
-      "1+2".is_i?.must_equal false
-      "3-2".is_i?.must_equal false
+      _("+5".is_i?).must_equal true
+      _("-2".is_i?).must_equal true
+      _("+02".is_i?).must_equal true
+      _("1+2".is_i?).must_equal false
+      _("3-2".is_i?).must_equal false
     end
   end
 end

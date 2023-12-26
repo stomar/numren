@@ -15,7 +15,7 @@ describe Numren::Optionparser do
       :number => "+10",
       :digits => nil
     }
-    options.must_equal expected
+    _(options).must_equal expected
   end
 
   it "should recognize the -d option and return the correct default values" do
@@ -25,23 +25,23 @@ describe Numren::Optionparser do
       :number => nil,
       :digits => 1
     }
-    options.must_equal expected
+    _(options).must_equal expected
   end
 
   it "should not accept invalid -d option values" do
-    lambda { Numren::Optionparser.parse!(["-d", "0.5", "01_Sample.txt"]) }.must_raise OptionParser::InvalidArgument
-    lambda { Numren::Optionparser.parse!(["-d",   "0", "01_Sample.txt"]) }.must_raise OptionParser::InvalidArgument
-    lambda { Numren::Optionparser.parse!(["-d",  "-1", "01_Sample.txt"]) }.must_raise OptionParser::InvalidArgument
+    _ { Numren::Optionparser.parse!(["-d", "0.5", "01_Sample.txt"]) }.must_raise OptionParser::InvalidArgument
+    _ { Numren::Optionparser.parse!(["-d",   "0", "01_Sample.txt"]) }.must_raise OptionParser::InvalidArgument
+    _ { Numren::Optionparser.parse!(["-d",  "-1", "01_Sample.txt"]) }.must_raise OptionParser::InvalidArgument
   end
 
   it "should not accept wrong number of arguments" do
-    lambda { Numren::Optionparser.parse!(["01_Sample.txt"]) }.must_raise ArgumentError
-    lambda { Numren::Optionparser.parse!([""]) }.must_raise ArgumentError
-    lambda { Numren::Optionparser.parse!([]) }.must_raise ArgumentError
-    lambda { Numren::Optionparser.parse!(["-d", "1"]) }.must_raise ArgumentError
+    _ { Numren::Optionparser.parse!(["01_Sample.txt"]) }.must_raise ArgumentError
+    _ { Numren::Optionparser.parse!([""]) }.must_raise ArgumentError
+    _ { Numren::Optionparser.parse!([]) }.must_raise ArgumentError
+    _ { Numren::Optionparser.parse!(["-d", "1"]) }.must_raise ArgumentError
   end
 
   it "should not accept invalid options" do
-    lambda { Numren::Optionparser.parse!(["-x"]) }.must_raise OptionParser::InvalidOption
+    _ { Numren::Optionparser.parse!(["-x"]) }.must_raise OptionParser::InvalidOption
   end
 end
