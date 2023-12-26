@@ -11,9 +11,9 @@ describe Numren::Optionparser do
   it "should return the correct default values" do
     options = Numren::Optionparser.parse!(["01_Sample.txt", "02_Sample.txt", "+10"])
     expected = {
-      :files => ["01_Sample.txt", "02_Sample.txt"],
-      :number => "+10",
-      :digits => nil
+      files: ["01_Sample.txt", "02_Sample.txt"],
+      number: "+10",
+      digits: nil
     }
     _(options).must_equal expected
   end
@@ -21,9 +21,9 @@ describe Numren::Optionparser do
   it "should recognize the -d option and return the correct default values" do
     options = Numren::Optionparser.parse!(["-d", "1", "01_Sample.txt", "02_Sample.txt"])
     expected = {
-      :files => ["01_Sample.txt", "02_Sample.txt"],
-      :number => nil,
-      :digits => 1
+      files: ["01_Sample.txt", "02_Sample.txt"],
+      number: nil,
+      digits: 1
     }
     _(options).must_equal expected
   end

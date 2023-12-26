@@ -157,9 +157,9 @@ module Numren
     def self.parse!(argv)
 
       options = {
-        :files  => nil,
-        :number => nil,
-        :digits => nil
+        files: nil,
+        number: nil,
+        digits: nil
       }
 
       opt_parser = OptionParser.new do |opt|
@@ -220,7 +220,7 @@ module Numren
   # It parses the command line arguments and renames the files.
   class Application
 
-    ERRORCODE = {:general => 1, :usage => 2}
+    ERRORCODE = {general: 1, usage: 2}
 
     def initialize
       begin
