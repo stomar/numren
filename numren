@@ -83,7 +83,7 @@ module Numren
     end
 
     # Allows a Filename to act like a String.
-    alias :to_str :to_s
+    alias to_str to_s
 
     # Compare Filename objects based on their string representation.
     def <=>(other)
@@ -114,7 +114,7 @@ module Numren
       new_number = is_change ? number + num : num
 
       message = "`#{number}' cannot be changed by #{num}."
-      raise(FilenameError, message, caller)  if new_number < 0
+      raise(FilenameError, message, caller)  if new_number.negative?
 
       @number = new_number
       self.digits = [new_digits, number.to_s.size, digits].max
@@ -165,15 +165,15 @@ module Numren
       }
 
       opt_parser = OptionParser.new do |opt|
-        opt.banner = "Usage: #{PROGNAME} [options] file[s] number \n" +
+        opt.banner = "Usage: #{PROGNAME} [options] file[s] number \n" \
                      "   or: #{PROGNAME} -d NUMBER file[s]"
-        opt.separator %q{
+        opt.separator "
           numren renames files with a filename consisting of a number part
           and a name part separated by an underscore, like e.g. `01_Sample.txt'.
           Only the number part is changed, according to the given number.
 
           Options:
-        }.gsub(/^ +/, "")
+        ".gsub(/^ +/, "")
 
         # process --version and --help first,
         # exit successfully (GNU Coding Standards)
@@ -192,7 +192,7 @@ module Numren
 
         opt.on("-d", "--digits NUMBER", Integer,
                "Rename the given files using NUMBER digits (if possible).") do |d|
-          raise(OptionParser::InvalidArgument, d)  unless d > 0
+          raise(OptionParser::InvalidArgument, d)  unless d.positive?
 
           options[:digits] = d
         end
@@ -210,7 +210,7 @@ module Numren
       end
 
       # only file[s] should be left (at least 1 argument)
-      raise(ArgumentError, "wrong number of arguments")  if argv.size < 1
+      raise(ArgumentError, "wrong number of arguments")  if argv.empty?
 
       options[:files] = Array.new(argv)
       argv.clear
@@ -311,10 +311,10 @@ module Numren
       exit ERRORCODE[:usage]
     end
   end
-end  # module
+end
 
 ### call main method only if called on command line
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
   Numren::Application.new.run!
 end
