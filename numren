@@ -74,7 +74,7 @@ module Numren
       @number = number_str.to_i
       @digits = number_str.size
 
-      to_s == filename or fail "assertion failure"
+      to_s == filename or raise "assertion failure"
     end
 
     # Returns the numbered filename as string.
