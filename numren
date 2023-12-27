@@ -165,8 +165,10 @@ module Numren
       }
 
       opt_parser = OptionParser.new do |opt|
-        opt.banner = "Usage: #{PROGNAME} [options] file[s] number \n" \
-                     "   or: #{PROGNAME} -d NUMBER file[s]"
+        opt.banner = <<~USAGE
+          Usage: #{PROGNAME} [options] file[s] number
+             or: #{PROGNAME} -d NUMBER file[s]
+        USAGE
         opt.separator "
           numren renames files with a filename consisting of a number part
           and a name part separated by an underscore, like e.g. `01_Sample.txt'.
