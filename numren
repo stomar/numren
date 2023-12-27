@@ -315,6 +315,4 @@ end
 
 ### call main method only if called on command line
 
-if __FILE__ == $PROGRAM_NAME
-  Numren::Application.new.run!
-end
+Numren::Application.new.run!  if __FILE__ == $PROGRAM_NAME
