@@ -31,7 +31,7 @@ class String
   # Tests if string is a positive integer (padding with zeros is allowed).
   #
   # Returns +true+ if string is an integer.
-  def is_i?
+  def integer?
     match?(/\A[+-]?[0-9]+\Z/)
   end
 end
@@ -207,7 +207,7 @@ module Numren
       # last argument must be a number (unless -d option is set)
       unless options[:digits]
         raise(ArgumentError, "wrong number of arguments")  if argv.size < 2
-        raise(ArgumentError, "last argument must be a number")  unless argv.last.is_i?
+        raise(ArgumentError, "last argument must be a number")  unless argv.last.integer?
 
         options[:number] = argv.pop
       end
