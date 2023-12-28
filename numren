@@ -26,15 +26,6 @@
 
 require "optparse"
 
-class String
-
-  # Tests if string is a positive integer (padding with zeros is allowed).
-  #
-  # Returns +true+ if string is an integer.
-  def integer?
-    match?(/\A[+-]?[0-9]+\Z/)
-  end
-end
 
 # This module contains the classes for the +numren+ tool.
 module Numren
@@ -51,6 +42,19 @@ module Numren
     This is free software: you are free to change and redistribute it.
     There is NO WARRANTY, to the extent permitted by law.
   TEXT
+
+  # Extensions for the String class.
+  module StringExtensions
+
+    # Tests if string is a positive integer (padding with zeros is allowed).
+    #
+    # Returns +true+ if string is an integer.
+    def integer?
+      match?(/\A[+-]?[0-9]+\Z/)
+    end
+  end
+
+  String.include StringExtensions
 
   # An internal error class.
   class FilenameError < StandardError
