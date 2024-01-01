@@ -111,7 +111,7 @@ module Numren
     # +number_str+ - string with new number part of filename,
     #  like '42', '+5' or '-003'
     def number=(number_str)
-      is_change = number_str =~ /\A[+-]/
+      is_change = number_str.start_with?(/[+-]/)
       new_digits = number_str[/\d+/].size
 
       num = number_str.to_i
