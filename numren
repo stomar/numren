@@ -142,7 +142,7 @@ module Numren
     # +FilenameError+ if +filename+ is not of the form `number_name'.
     def split_filename(filename)
       message = "`#{filename}' not of the form `number_name'."
-      raise(FilenameError, message, caller)  unless /\A\d+_.+/ =~ filename
+      raise(FilenameError, message, caller)  unless filename.match?(/\A\d+_.+\z/)
 
       number_part, name_part = filename.split("_", 2)
 
@@ -305,7 +305,7 @@ module Numren
       loop do
         $stderr.print "#{question} [y/n] "
         reply = $stdin.gets.chomp.downcase  # $stdin avoids gets/ARGV problem
-        return reply == "y"  if /\A[yn]\z/ =~ reply
+        return reply == "y"  if reply.match?(/\A[yn]\z/)
 
         warn "Please answer `y' or `n'."
       end
