@@ -31,8 +31,8 @@ require "optparse"
 module Numren
 
   PROGNAME  = "numren"
-  VERSION   = "1.0.0"
-  DATE      = "2012-03-17"
+  VERSION   = "1.1.0"
+  DATE      = "2024-01-05"
   HOMEPAGE  = "https://github.com/stomar/numren/"
   TAGLINE   = "rename files with numbered filenames"
 
